@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class BasicComponents {
   static _GroupRadio groupRadio = _GroupRadio();
+  static _GroupCheck groupCheck = _GroupCheck();
   static _DatePicker datePicker = _DatePicker();
   static _Button button = _Button();
+}
+
+class _GroupCheck {
+  Color checkColor = Colors.blue;
 }
 
 class _GroupRadio {

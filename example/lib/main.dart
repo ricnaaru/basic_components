@@ -1,17 +1,14 @@
-import 'package:basic_components/basic_components.dart';
+
 import 'package:basic_components/components/chooser.dart';
 import 'package:basic_components/components/column.dart';
 import 'package:basic_components/components/date_picker.dart';
 import 'package:basic_components/components/group_check.dart';
 import 'package:basic_components/components/group_radio.dart';
-import 'package:basic_components/components/row.dart';
 import 'package:basic_components/components/increment.dart';
+import 'package:basic_components/components/row.dart';
 import 'package:basic_components/components/text_field.dart';
 import 'package:flutter/material.dart';
 
-const String loremIpsum =
-    "You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man.";
-bool a = false;
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -37,8 +34,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextFieldController controller = TextFieldController();
-  IncrementController incrementController = IncrementController(amount: 10);
+  AdvTextFieldController controller = AdvTextFieldController();
+  AdvIncrementController incrementController = AdvIncrementController(amount: 10);
 
   AdvGroupRadioController groupRadioController = AdvGroupRadioController(text: "Test1", items: {
     "Test1": Icon(Icons.edit_attributes),
@@ -54,12 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!a)
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      a = true;
-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => MyHomePage(title: "title",)));
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -80,11 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   prefix: Text("Prefix"),
                   prefixIcon: Material(
                       child: InkWell(
-                    child: Icon(Icons.add),
-                    onTap: () {
-                      print("makan siang");
-                    },
-                  )),
+                        child: Icon(Icons.add),
+                        onTap: () {
+                          print("makan siang");
+                        },
+                      )),
                   isDense: true,
                   helperText: "This is Helper Text",
                 ),
@@ -104,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.green)),
                   filled: true,
                   enabledBorder:
-                      OutlineInputBorder(borderSide: BorderSide(width: 5.0, color: Colors.red)),
+                  OutlineInputBorder(borderSide: BorderSide(width: 5.0, color: Colors.red)),
 //                  disabledBorder: InputBorder.none,
 //                  enabledBorder: InputBorder.none,
                   errorBorder: InputBorder.none,
@@ -116,72 +107,72 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
 //                scrollPadding: EdgeInsets.all(16.0),
               ),
-//              AdvRow(
-//                padding: EdgeInsets.symmetric(horizontal: 16.0),
-//                divider: RowDivider(16.0),
-//                children: [
-//                  FlatButton(
-//                    child: Text("Hide Password!"),
-//                    onPressed: () {
-//                      controller.obscureText = true;
-//                    },
-//                  ),
-//                  FlatButton(
-//                    child: Text("Unhide Password!"),
-//                    onPressed: () {
-//                      controller.obscureText = false;
-//                    },
-//                  ),
-//                ],
-//              ),
-//              AdvRow(
-//                padding: EdgeInsets.symmetric(horizontal: 16.0),
-//                divider: RowDivider(16.0),
-//                children: [
-//                  FlatButton(
-//                    child: Text("Set Error!"),
-//                    onPressed: () {
-//                      controller.error = "Error!";
-//                    },
-//                  ),
-//                  FlatButton(
-//                    child: Text("Unset Error!"),
-//                    onPressed: () {
-//                      controller.error = null;
-//                    },
-//                  ),
-//                ],
-//              ),
-//              AdvRow(
-//                padding: EdgeInsets.symmetric(horizontal: 16.0),
-//                divider: RowDivider(16.0),
-//                children: [
-//                  FlatButton(
-//                    child: Text("Disable!"),
-//                    onPressed: () {
-//                      controller.enabled = false;
-//                    },
-//                  ),
-//                  FlatButton(
-//                    child: Text("Enable!"),
-//                    onPressed: () {
-//                      controller.enabled = true;
-//                    },
-//                  ),
-//                ],
-//              ),
-//              AdvRow(
-//                padding: EdgeInsets.symmetric(horizontal: 16.0),
-//                divider: RowDivider(16.0),
-//                children: [
-//                  FlatButton(
-//                    child: Text("Set Text!"),
-//                    onPressed: () {
-//                      controller.text = "Date Time = ${DateTime.now()}";
-//                    },
-//                  ),
-//                ],
-//              ),
+              AdvRow(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                divider: RowDivider(16.0),
+                children: [
+                  FlatButton(
+                    child: Text("Hide Password!"),
+                    onPressed: () {
+                      controller.obscureText = true;
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Unhide Password!"),
+                    onPressed: () {
+                      controller.obscureText = false;
+                    },
+                  ),
+                ],
+              ),
+              AdvRow(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                divider: RowDivider(16.0),
+                children: [
+                  FlatButton(
+                    child: Text("Set Error!"),
+                    onPressed: () {
+                      controller.error = "Error!";
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Unset Error!"),
+                    onPressed: () {
+                      controller.error = null;
+                    },
+                  ),
+                ],
+              ),
+              AdvRow(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                divider: RowDivider(16.0),
+                children: [
+                  FlatButton(
+                    child: Text("Disable!"),
+                    onPressed: () {
+                      controller.enabled = false;
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Enable!"),
+                    onPressed: () {
+                      controller.enabled = true;
+                    },
+                  ),
+                ],
+              ),
+              AdvRow(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                divider: RowDivider(16.0),
+                children: [
+                  FlatButton(
+                    child: Text("Set Text!"),
+                    onPressed: () {
+                      controller.text = "Date Time = ${DateTime.now()}";
+                    },
+                  ),
+                ],
+              ),
               Container(
                 color: Colors.white,
                 child: AdvChooser(

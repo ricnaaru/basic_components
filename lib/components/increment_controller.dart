@@ -1,6 +1,6 @@
 part of increment;
 
-class IncrementController extends ValueNotifier<TextFieldValue> {
+class AdvIncrementController extends ValueNotifier<TextFieldValue> {
   num get amount => value.amount;
 
   set amount(num newAmount) {
@@ -61,7 +61,7 @@ class IncrementController extends ValueNotifier<TextFieldValue> {
     );
   }
 
-  IncrementController({
+  AdvIncrementController({
     num amount,
     num minAmount,
     num maxAmount,
@@ -77,7 +77,7 @@ class IncrementController extends ValueNotifier<TextFieldValue> {
                 enabled: enabled ?? true,
               ));
 
-  IncrementController.fromValue(TextFieldValue value)
+  AdvIncrementController.fromValue(TextFieldValue value)
       : super(value ?? TextFieldValue.empty);
 
   void clear() {

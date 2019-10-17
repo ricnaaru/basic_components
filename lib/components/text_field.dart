@@ -9,7 +9,7 @@ part 'text_field_controller.dart';
 class AdvTextField extends StatefulWidget {
   final Key key;
   final String text;
-  final TextFieldController controller;
+  final AdvTextFieldController controller;
   final FocusNode focusNode;
   final InputDecoration decoration;
   final TextInputType keyboardType;
@@ -90,31 +90,31 @@ class AdvTextField extends StatefulWidget {
     this.scrollController,
     this.scrollPhysics,
   }) : assert(controller == null ||
-            (text == null &&
-                decoration?.errorText == null &&
-                enabled == null &&
-                obscureText == null));
+      (text == null &&
+          decoration?.errorText == null &&
+          enabled == null &&
+          obscureText == null));
 
   @override
   _AdvTextFieldState createState() => _AdvTextFieldState();
 }
 
 class _AdvTextFieldState extends State<AdvTextField> {
-  TextFieldController get _effectiveController => widget.controller ?? _ctrl;
+  AdvTextFieldController get _effectiveController => widget.controller ?? _ctrl;
 
-  TextFieldController _ctrl;
+  AdvTextFieldController _ctrl;
 
   @override
   void initState() {
     super.initState();
 
     _ctrl = widget.controller == null
-        ? TextFieldController(
-            text: widget.text ?? "",
-            error: widget.decoration?.errorText,
-            enabled: widget.enabled ?? true,
-            obscureText: widget.obscureText ?? false,
-          )
+        ? AdvTextFieldController(
+      text: widget.text ?? "",
+      error: widget.decoration?.errorText,
+      enabled: widget.enabled ?? true,
+      obscureText: widget.obscureText ?? false,
+    )
         : null;
 
     _effectiveController.addListener(_update);
@@ -128,14 +128,14 @@ class _AdvTextFieldState extends State<AdvTextField> {
   void didUpdateWidget(AdvTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller == null && oldWidget.controller != null)
-      _ctrl = TextFieldController.fromValue(oldWidget.controller.value);
+      _ctrl = AdvTextFieldController.fromValue(oldWidget.controller.value);
     else if (widget.controller != null && oldWidget.controller == null) _ctrl = null;
   }
 
   @override
   Widget build(BuildContext context) {
     TextEditingController textEditingCtrl =
-        new TextEditingController(text: _effectiveController.text);
+    new TextEditingController(text: _effectiveController.text);
 
     textEditingCtrl.addListener(() {
       _effectiveController.removeListener(_update);

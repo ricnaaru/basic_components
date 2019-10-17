@@ -1,6 +1,6 @@
 part of text_field;
 
-class TextFieldController extends ValueNotifier<TextFieldValue> {
+class AdvTextFieldController extends ValueNotifier<TextFieldValue> {
   String get text => value.text;
 
   set text(String newText) {
@@ -45,21 +45,21 @@ class TextFieldController extends ValueNotifier<TextFieldValue> {
     );
   }
 
-  TextFieldController({
+  AdvTextFieldController({
     String text,
     String error,
     bool enabled,
     bool obscureText,
   }) : super(text == null && error == null && enabled == null && obscureText == null
-            ? TextFieldValue.empty
-            : new TextFieldValue(
-                text: text,
-                error: error,
-                enabled: enabled ?? true,
-                obscureText: obscureText ?? false,
-              ));
+      ? TextFieldValue.empty
+      : new TextFieldValue(
+    text: text,
+    error: error,
+    enabled: enabled ?? true,
+    obscureText: obscureText ?? false,
+  ));
 
-  TextFieldController.fromValue(TextFieldValue value)
+  AdvTextFieldController.fromValue(TextFieldValue value)
       : super(value ?? TextFieldValue.empty);
 
   void clear() {

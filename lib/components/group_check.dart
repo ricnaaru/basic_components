@@ -81,7 +81,7 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
                 value: item.isChecked,
                 radius: Radius.circular(AdvCheckbox.width / 4),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                activeColor: BasicComponents.groupRadio.checkColor,
+                activeColor: BasicComponents.groupCheck.checkColor,
               )))));
     }
 

@@ -1,6 +1,6 @@
 # example
 
-A new Flutter module.
+Basic Components Example
 
 ## Getting Started
 

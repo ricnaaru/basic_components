@@ -9,7 +9,7 @@ part 'increment_controller.dart';
 class AdvIncrement extends StatefulWidget {
   final Key key;
   final num amount;
-  final IncrementController controller;
+  final AdvIncrementController controller;
   final FocusNode focusNode;
   final InputDecoration decoration;
   final TextStyle style;
@@ -55,16 +55,16 @@ class AdvIncrement extends StatefulWidget {
 }
 
 class _AdvIncrementState extends State<AdvIncrement> {
-  IncrementController get _effectiveController => widget.controller ?? _ctrl;
+  AdvIncrementController get _effectiveController => widget.controller ?? _ctrl;
 
-  IncrementController _ctrl;
+  AdvIncrementController _ctrl;
 
   @override
   void initState() {
     super.initState();
 
     _ctrl = widget.controller == null
-        ? IncrementController(
+        ? AdvIncrementController(
             amount: widget.amount ?? "",
             error: widget.decoration?.errorText,
             enabled: widget.enabled ?? true,
@@ -82,7 +82,7 @@ class _AdvIncrementState extends State<AdvIncrement> {
   void didUpdateWidget(AdvIncrement oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller == null && oldWidget.controller != null)
-      _ctrl = IncrementController.fromValue(oldWidget.controller.value);
+      _ctrl = AdvIncrementController.fromValue(oldWidget.controller.value);
     else if (widget.controller != null && oldWidget.controller == null) _ctrl = null;
   }
 

@@ -3,12 +3,12 @@ library group_check;
 import 'dart:async';
 
 import 'package:basic_components/basic_components.dart';
-import 'package:basic_components/components/check_box.dart';
-import 'package:basic_components/components/column.dart';
-import 'package:basic_components/components/list_tile.dart';
+import 'package:basic_components/components/adv_check_box.dart';
+import 'package:basic_components/components/adv_column.dart';
+import 'package:basic_components/components/adv_list_tile.dart';
 import 'package:flutter/material.dart';
 
-part 'group_check_controller.dart';
+part 'adv_group_check_controller.dart';
 
 typedef GroupCheckCallback = void Function(List<String> data);
 

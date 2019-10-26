@@ -5,6 +5,7 @@ class BasicComponents {
   static _GroupCheck groupCheck = _GroupCheck();
   static _DatePicker datePicker = _DatePicker();
   static _Button button = _Button();
+  static _Loading loading = _Loading();
 }
 
 class _GroupCheck {
@@ -16,6 +17,8 @@ class _GroupRadio {
 }
 
 class _DatePicker {
+  String dateFormat = "dd-MM-yyyy";
+
   Color daysLabelColor = Color(0xff208e5d);
   Color todayTextColor = Color(0xffffffff);
   Color todayColor = Color(0xffff6378);
@@ -47,4 +50,11 @@ class _DatePicker {
 class _Button {
   Color textColor = Color(0xffffffff);
   Color backgroundColor = Color(0xfff4329a);
+}
+
+class _Loading {
+  String assetName = "";
+  Color barrierColor = const Color(0x10000000);
+  double width = 100.0;
+  double height = 100.0;
 }

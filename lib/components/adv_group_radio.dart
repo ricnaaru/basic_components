@@ -3,12 +3,12 @@ library group_radio;
 import 'dart:async';
 
 import 'package:basic_components/basic_components.dart';
-import 'package:basic_components/components/check_box.dart';
-import 'package:basic_components/components/column.dart';
-import 'package:basic_components/components/list_tile.dart';
+import 'package:basic_components/components/adv_check_box.dart';
+import 'package:basic_components/components/adv_column.dart';
+import 'package:basic_components/components/adv_list_tile.dart';
 import 'package:flutter/material.dart';
 
-part 'group_radio_controller.dart';
+part 'adv_group_radio_controller.dart';
 
 typedef GroupRadioCallback = void Function(String data);
 
@@ -20,7 +20,7 @@ class AdvGroupRadio extends StatefulWidget {
       {String text, Map<String, Widget> items, AdvGroupRadioController controller, this.callback})
       : assert(controller == null || (text == null && items == null)),
         this.controller =
-            controller ?? new AdvGroupRadioController(text: text ?? "", items: items ?? []);
+            controller ?? new AdvGroupRadioController(text: text ?? "", items: items ?? {});
 
   @override
   State<StatefulWidget> createState() => _AdvGroupRadioState();
@@ -66,7 +66,7 @@ class _AdvGroupRadioState extends State<AdvGroupRadio> {
                               }));
 
                           Timer(Duration(milliseconds: 300), () {
-//                            Navigator.pop(context);
+                            Navigator.pop(context);
                             if (widget.callback != null) widget.callback(itemKey);
                           });
                         });

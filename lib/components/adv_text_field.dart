@@ -4,17 +4,19 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-part 'text_field_controller.dart';
+part 'adv_text_field_controller.dart';
 
 class AdvTextField extends StatefulWidget {
   final Key key;
   final String text;
   final AdvTextFieldController controller;
   final FocusNode focusNode;
+  final EdgeInsets margin;
   final InputDecoration decoration;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
   final TextCapitalization textCapitalization;
+  final String measureText;
   final TextStyle style;
   final StrutStyle strutStyle;
   final TextAlign textAlign;
@@ -54,9 +56,11 @@ class AdvTextField extends StatefulWidget {
     this.controller,
     this.focusNode,
     this.decoration,
+    this.margin,
     this.keyboardType,
     this.textInputAction,
     this.textCapitalization = TextCapitalization.none,
+    this.measureText,
     this.style,
     this.strutStyle,
     this.textAlign = TextAlign.start,
@@ -90,10 +94,10 @@ class AdvTextField extends StatefulWidget {
     this.scrollController,
     this.scrollPhysics,
   }) : assert(controller == null ||
-      (text == null &&
-          decoration?.errorText == null &&
-          enabled == null &&
-          obscureText == null));
+            (text == null &&
+                decoration?.errorText == null &&
+                enabled == null &&
+                obscureText == null));
 
   @override
   _AdvTextFieldState createState() => _AdvTextFieldState();
@@ -101,7 +105,7 @@ class AdvTextField extends StatefulWidget {
 
 class _AdvTextFieldState extends State<AdvTextField> {
   AdvTextFieldController get _effectiveController => widget.controller ?? _ctrl;
-
+  TextEditingController textEditingCtrl = TextEditingController();
   AdvTextFieldController _ctrl;
 
   @override
@@ -118,9 +122,21 @@ class _AdvTextFieldState extends State<AdvTextField> {
         : null;
 
     _effectiveController.addListener(_update);
+
+    textEditingCtrl.addListener(_updateTextEditing);
+  }
+
+  _updateTextEditing() {
+    _effectiveController.removeListener(_update);
+    _effectiveController.text = textEditingCtrl.text;
+    _effectiveController.addListener(_update);
   }
 
   _update() {
+    textEditingCtrl.removeListener(_updateTextEditing);
+    textEditingCtrl.text = _effectiveController.text;
+    textEditingCtrl.addListener(_updateTextEditing);
+
     if (this.mounted) setState(() {});
   }
 
@@ -130,59 +146,70 @@ class _AdvTextFieldState extends State<AdvTextField> {
     if (widget.controller == null && oldWidget.controller != null)
       _ctrl = AdvTextFieldController.fromValue(oldWidget.controller.value);
     else if (widget.controller != null && oldWidget.controller == null) _ctrl = null;
+    _effectiveController.removeListener(_update);
+    _effectiveController.addListener(_update);
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController textEditingCtrl =
-    new TextEditingController(text: _effectiveController.text);
+    InputDecoration decoration = widget.decoration ?? InputDecoration();
+    ThemeData themeData = Theme.of(context);
+    double width;
+    if (widget.measureText != null) {
+      var tp = new TextPainter(
+          text: TextSpan(
+              text: widget.measureText, style: (widget.style ?? themeData.textTheme.subhead)),
+          textDirection: TextDirection.ltr);
 
-    textEditingCtrl.addListener(() {
-      _effectiveController.removeListener(_update);
-      _effectiveController.text = textEditingCtrl.text;
-      _effectiveController.addListener(_update);
-    });
+      tp.layout();
 
-    return TextField(
-      key: widget.key,
-      controller: textEditingCtrl,
-      focusNode: widget.focusNode,
-      decoration: widget.decoration?.copyWith(errorText: _effectiveController.error),
-      keyboardType: widget.keyboardType,
-      textInputAction: widget.textInputAction,
-      textCapitalization: widget.textCapitalization,
-      style: widget.style,
-      strutStyle: widget.strutStyle,
-      textAlign: widget.textAlign,
-      textAlignVertical: widget.textAlignVertical,
-      textDirection: widget.textDirection,
-      readOnly: widget.readOnly,
-      toolbarOptions: widget.toolbarOptions,
-      showCursor: widget.showCursor,
-      autofocus: widget.autofocus,
-      obscureText: _effectiveController.obscureText,
-      autocorrect: widget.autocorrect,
-      maxLines: widget.maxLines,
-      minLines: widget.minLines,
-      expands: widget.expands,
-      maxLength: widget.maxLength,
-      maxLengthEnforced: widget.maxLengthEnforced,
-      onChanged: widget.onChanged,
-      onEditingComplete: widget.onEditingComplete,
-      onSubmitted: widget.onSubmitted,
-      inputFormatters: widget.inputFormatters,
-      enabled: _effectiveController.enabled,
-      cursorWidth: widget.cursorWidth,
-      cursorRadius: widget.cursorRadius,
-      cursorColor: widget.cursorColor,
-      keyboardAppearance: widget.keyboardAppearance,
-      scrollPadding: widget.scrollPadding,
-      dragStartBehavior: widget.dragStartBehavior,
-      enableInteractiveSelection: widget.enableInteractiveSelection,
-      onTap: widget.onTap,
-      buildCounter: widget.buildCounter,
-      scrollController: widget.scrollController,
-      scrollPhysics: widget.scrollPhysics,
+      width = tp.width;
+    }
+
+    return Container(
+      width: width,
+      margin: widget.margin,
+      child: TextField(
+        key: widget.key,
+        controller: textEditingCtrl,
+        focusNode: widget.focusNode,
+        decoration: decoration.copyWith(errorText: _effectiveController.error),
+        keyboardType: widget.keyboardType,
+        textInputAction: widget.textInputAction,
+        textCapitalization: widget.textCapitalization,
+        style: widget.style,
+        strutStyle: widget.strutStyle,
+        textAlign: widget.textAlign,
+        textAlignVertical: widget.textAlignVertical,
+        textDirection: widget.textDirection,
+        readOnly: widget.readOnly,
+        toolbarOptions: widget.toolbarOptions,
+        showCursor: widget.showCursor,
+        autofocus: widget.autofocus,
+        obscureText: _effectiveController.obscureText,
+        autocorrect: widget.autocorrect,
+        maxLines: widget.maxLines,
+        minLines: widget.minLines,
+        expands: widget.expands,
+        maxLength: widget.maxLength,
+        maxLengthEnforced: widget.maxLengthEnforced,
+        onChanged: widget.onChanged,
+        onEditingComplete: widget.onEditingComplete,
+        onSubmitted: widget.onSubmitted,
+        inputFormatters: widget.inputFormatters,
+        enabled: _effectiveController.enabled,
+        cursorWidth: widget.cursorWidth,
+        cursorRadius: widget.cursorRadius,
+        cursorColor: widget.cursorColor,
+        keyboardAppearance: widget.keyboardAppearance,
+        scrollPadding: widget.scrollPadding,
+        dragStartBehavior: widget.dragStartBehavior,
+        enableInteractiveSelection: widget.enableInteractiveSelection,
+        onTap: widget.onTap,
+        buildCounter: widget.buildCounter,
+        scrollController: widget.scrollController,
+        scrollPhysics: widget.scrollPhysics,
+      ),
     );
   }
 }

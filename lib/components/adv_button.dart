@@ -10,7 +10,7 @@ class AdvButton extends StatelessWidget {
   final Widget child;
   final bool enable;
   final VoidCallback onPressed;
-  final bool circular;
+  final double circular;
   final ButtonSize buttonSize;
   final bool onlyBorder;
   final bool reverse;
@@ -21,18 +21,19 @@ class AdvButton extends StatelessWidget {
 
   AdvButton._(
       {this.child,
-      bool circular = true,
+      double circular = 5.0,
       bool enable = true,
       bool onlyBorder = false,
       bool reverse = false,
       this.onPressed,
-      this.buttonSize = ButtonSize.large,
+      ButtonSize buttonSize,
       Color primaryColor,
       Color accentColor,
       this.width,
       EdgeInsets padding})
-      : this.enable = enable ?? true,
-        this.circular = circular ?? true,
+      : this.buttonSize = buttonSize ?? ButtonSize.large,
+        this.enable = enable ?? true,
+        this.circular = circular ?? 5.0,
         this.onlyBorder = onlyBorder ?? false,
         this.reverse = reverse ?? false,
         this.primaryColor = !reverse
@@ -44,17 +45,17 @@ class AdvButton extends StatelessWidget {
         this.padding = padding ?? EdgeInsets.all(0.0);
 
   factory AdvButton.text(String text,
-      {bool circular = true,
-        bool enable = true,
-        bool onlyBorder = false,
-        bool reverse = false,
-        bool bold = false,
-        VoidCallback onPressed,
-        ButtonSize buttonSize,
-        Color backgroundColor,
-        Color textColor,
-        double width,
-        EdgeInsets padding}) {
+      {double circular = 5.0,
+      bool enable = true,
+      bool onlyBorder = false,
+      bool reverse = false,
+      bool bold = false,
+      VoidCallback onPressed,
+      ButtonSize buttonSize,
+      Color backgroundColor,
+      Color textColor,
+      double width,
+      EdgeInsets padding}) {
     Color primaryColor = !reverse
         ? backgroundColor ?? BasicComponents.button.backgroundColor
         : textColor ?? BasicComponents.button.textColor;
@@ -67,7 +68,7 @@ class AdvButton extends StatelessWidget {
         : FontWeight.normal;
     Color disableTextColor = Color.lerp(!reverse ? Colors.white : Colors.black54, lerpColor, 0.6);
     Color disableBackgroundColor =
-    Color.lerp(reverse ? Colors.white : Colors.black54, lerpColor, 0.6);
+        Color.lerp(reverse ? Colors.white : Colors.black54, lerpColor, 0.6);
     Color _textColor = !onlyBorder ? accentColor : primaryColor;
     Color _disableTextColor = !onlyBorder ? disableTextColor : disableBackgroundColor;
     TextStyle textStyle = TextStyle(
@@ -76,9 +77,9 @@ class AdvButton extends StatelessWidget {
     return AdvButton._(
       child: Text(text, style: textStyle),
       circular: circular,
-      enable: enable = true,
-      onlyBorder: onlyBorder = false,
-      reverse: reverse = false,
+      enable: enable,
+      onlyBorder: onlyBorder,
+      reverse: reverse,
       onPressed: onPressed,
       buttonSize: buttonSize,
       primaryColor: primaryColor,
@@ -88,23 +89,25 @@ class AdvButton extends StatelessWidget {
     );
   }
 
-  factory AdvButton.custom({@required Widget child, bool circular = true,
-        bool enable = true,
-        bool onlyBorder = false,
-        bool reverse = false,
-        bool bold = false,
-        VoidCallback onPressed,
-        ButtonSize buttonSize,
-        Color primaryColor,
-        Color accentColor,
-        double width,
-        EdgeInsets padding}) {
+  factory AdvButton.custom(
+      {@required Widget child,
+      double circular = 5.0,
+      bool enable = true,
+      bool onlyBorder = false,
+      bool reverse = false,
+      bool bold = false,
+      VoidCallback onPressed,
+      ButtonSize buttonSize,
+      Color primaryColor,
+      Color accentColor,
+      double width,
+      EdgeInsets padding}) {
     return AdvButton._(
       child: child,
       circular: circular,
-      enable: enable = true,
-      onlyBorder: onlyBorder = false,
-      reverse: reverse = false,
+      enable: enable,
+      onlyBorder: onlyBorder,
+      reverse: reverse,
       onPressed: onPressed,
       buttonSize: buttonSize,
       primaryColor: primaryColor,
@@ -130,7 +133,7 @@ class AdvButton extends StatelessWidget {
 
     ShapeBorder border = RoundedRectangleBorder(
         side: BorderSide(color: enable ? primaryColor : disableBackgroundColor, width: borderWidth),
-        borderRadius: new BorderRadius.circular(this.circular ? 5.0 : 0.0));
+        borderRadius: new BorderRadius.circular(this.circular));
 
     Color _color = onlyBorder ? accentColor : primaryColor;
     Color _disableColor = onlyBorder ? disableTextColor : disableBackgroundColor;

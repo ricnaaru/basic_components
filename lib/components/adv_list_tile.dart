@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:basic_components/components/row.dart';
+import 'package:basic_components/components/adv_row.dart';
 
 typedef GestureTapCallback = void Function();
 

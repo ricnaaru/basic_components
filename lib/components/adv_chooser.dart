@@ -1,38 +1,17 @@
-library date_picker;
+library chooser;
 
-import 'dart:ui' as ui;
-import 'dart:math';
-
-import 'package:intl/intl.dart' show DateFormat;
-import 'package:basic_components/basic_components.dart';
-import 'package:basic_components/components/column.dart';
-import 'package:basic_components/utilities/string_helper.dart';
-import 'package:basic_components/components/row.dart';
-import 'package:basic_components/components/visibility.dart';
-import 'package:basic_components/components/button.dart';
+import 'package:basic_components/components/adv_group_radio.dart';
+import 'package:basic_components/components/adv_list_tile.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-part "date_picker_controller.dart";
+part "adv_chooser_controller.dart";
 
-part "calendar_page.dart";
-
-part "calendar_carousel.dart";
-
-part "calendar_day.dart";
-
-part "calendar_month.dart";
-
-part "calendar_year.dart";
-
-typedef String OnDatePicked(List<DateTime> dates);
-
-class AdvDatePicker extends StatefulWidget {
+class AdvChooser extends StatefulWidget {
   final Key key;
-  final OnDatePicked onDatePicked;
   final String text;
-  final List<DateTime> dates;
-  final DatePickerController controller;
+  final Map<String, String> items;
+  final ChooserController controller;
   final FocusNode focusNode;
   final InputDecoration decoration;
   final TextStyle style;
@@ -61,11 +40,10 @@ class AdvDatePicker extends StatefulWidget {
   final ScrollController scrollController;
   final ScrollPhysics scrollPhysics;
 
-  AdvDatePicker({
+  AdvChooser({
     this.key,
-    this.onDatePicked,
     this.text,
-    this.dates,
+    this.items,
     this.controller,
     this.focusNode,
     this.decoration,
@@ -95,25 +73,71 @@ class AdvDatePicker extends StatefulWidget {
     this.scrollController,
     this.scrollPhysics,
   }) : assert(controller == null ||
-            (text == null && dates == null && decoration?.errorText == null && enabled == null));
+            (text == null && items == null && decoration?.errorText == null && enabled == null));
 
   @override
-  _AdvDatePickerState createState() => _AdvDatePickerState();
+  _AdvChooserState createState() => _AdvChooserState();
+
+  static Future<String> pickFromChooser(
+      BuildContext context, {
+        String title = "",
+        Map<String, String> items,
+        String currentItem = "",
+      }) async {
+    assert(items != null);
+
+    Map<String, Widget> groupRadioItems = items.map((key, value) {
+      return MapEntry(key, Text(value));
+    });
+
+    AdvGroupRadioController controller =
+    AdvGroupRadioController(text: currentItem, items: groupRadioItems);
+
+    return await showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AdvListTile(
+                padding: EdgeInsets.all(16.0),
+                start: Icon(Icons.close),
+                expanded:
+                Text(title, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700)),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              Container(height: 2.0, color: Theme.of(context).dividerColor),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: AdvGroupRadio(
+                    controller: controller,
+                    callback: (itemSelected) async {
+                      Navigator.of(context).pop(itemSelected);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+  }
 }
 
-class _AdvDatePickerState extends State<AdvDatePicker> {
-  DatePickerController get _effectiveController => widget.controller ?? _ctrl;
+class _AdvChooserState extends State<AdvChooser> {
+  ChooserController get _effectiveController => widget.controller ?? _ctrl;
 
-  DatePickerController _ctrl;
+  ChooserController _ctrl;
 
   @override
   void initState() {
     super.initState();
 
     _ctrl = widget.controller == null
-        ? DatePickerController(
+        ? ChooserController(
             text: widget.text ?? "",
-            dates: widget.dates,
+            items: widget.items,
             error: widget.decoration?.errorText,
             enabled: widget.enabled ?? true,
           )
@@ -127,10 +151,10 @@ class _AdvDatePickerState extends State<AdvDatePicker> {
   }
 
   @override
-  void didUpdateWidget(AdvDatePicker oldWidget) {
+  void didUpdateWidget(AdvChooser oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller == null && oldWidget.controller != null)
-      _ctrl = DatePickerController.fromValue(oldWidget.controller.value);
+      _ctrl = ChooserController.fromValue(oldWidget.controller.value);
     else if (widget.controller != null && oldWidget.controller == null) _ctrl = null;
   }
 
@@ -207,7 +231,7 @@ class _AdvDatePickerState extends State<AdvDatePicker> {
               width: fontSize + (paddingSize * 2),
               height: fontSize + (paddingSize * 2),
               padding: EdgeInsets.all(paddingSize),
-              child: Icon(Icons.calendar_today, size: iconSize)),
+              child: Icon(Icons.arrow_drop_down, size: iconSize)),
         ),
       ],
     );
@@ -215,61 +239,13 @@ class _AdvDatePickerState extends State<AdvDatePicker> {
 
   void _onTap() {
     if (!_effectiveController.enabled) return;
-
-    pickDate(context,
-        title: "widget.controller.label",
-        dates: _effectiveController.dates,
-        markedDates: [
-          MarkedDate(DateTime(2019, 10, 1), "Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 2), "Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 3), "Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 5), "Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 6), "Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 7), "Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 8), "Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 13), "Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 15), "Damn! Damn! Damn! Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 16), "Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 17), "Damn! Damn! Damn!"),
-          MarkedDate(DateTime(2019, 10, 18), "Damn! Damn! Damn! Damn! Damn! Damn!"),
-        ]).then((picked) {});
-  }
-
-  static Future<List<DateTime>> pickDate(
-    BuildContext context, {
-    String title,
-    List<DateTime> dates,
-    List<MarkedDate> markedDates,
-    SelectionType selectionType,
-    DateTime minDate,
-    DateTime maxDate,
-  }) async {
-    List<DateTime> result = await Navigator.push(
+    AdvChooser.pickFromChooser(
       context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) {
-          return CalendarPage(
-            title: title,
-            currentDate: dates ?? const [],
-            markedDates: markedDates ?? const [],
-            selectionType: selectionType ?? SelectionType.multi,
-            minDate: minDate,
-            maxDate: maxDate,
-          );
-        },
-        transitionsBuilder: (context, animation1, animation2, child) {
-          return new SlideTransition(
-            position: new Tween<Offset>(
-              begin: const Offset(0.0, 1.0),
-              end: Offset.zero,
-            ).animate(animation1),
-            child: child,
-          );
-        },
-        settings: RouteSettings(name: "ComDatePickerPage"),
-      ),
-    );
-
-    return result;
+      title: "widget.controller.label",
+      items: _effectiveController.items,
+      currentItem: _effectiveController.text,
+    ).then((picked) {
+      if (picked != null) _effectiveController.text = picked;
+    });
   }
 }

@@ -1,3 +1,7 @@
+## [0.0.4+2] - 30 Oct 2019.
+
+* Fix textfield controller
+
 ## [0.0.4+1] - 27 Oct 2019.
 
 * Fix textfield controller

@@ -146,8 +146,11 @@ class _AdvTextFieldState extends State<AdvTextField> {
     if (widget.controller == null && oldWidget.controller != null)
       _ctrl = AdvTextFieldController.fromValue(oldWidget.controller.value);
     else if (widget.controller != null && oldWidget.controller == null) _ctrl = null;
+
     _effectiveController.removeListener(_update);
+    textEditingCtrl.removeListener(_updateTextEditing);
     textEditingCtrl.text = _effectiveController.text;
+    textEditingCtrl.addListener(_updateTextEditing);
     _effectiveController.addListener(_update);
   }
 

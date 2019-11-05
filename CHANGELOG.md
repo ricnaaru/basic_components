@@ -1,3 +1,7 @@
+## [0.0.4+3] - 5 Nov 2019.
+
+* Fix textfield to set text editing controller's text on initstate
+
 ## [0.0.4+2] - 30 Oct 2019.
 
 * Fix textfield controller

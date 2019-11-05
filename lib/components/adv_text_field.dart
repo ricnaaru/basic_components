@@ -121,6 +121,8 @@ class _AdvTextFieldState extends State<AdvTextField> {
     )
         : null;
 
+    textEditingCtrl.text = _effectiveController.text;
+
     _effectiveController.addListener(_update);
 
     textEditingCtrl.addListener(_updateTextEditing);

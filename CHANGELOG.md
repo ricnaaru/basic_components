@@ -1,3 +1,7 @@
+## [0.0.4+4] - 6 Nov 2019.
+
+* Button Padding now is customizable from the outside
+
 ## [0.0.4+3] - 5 Nov 2019.
 
 * Fix textfield to set text editing controller's text on initstate

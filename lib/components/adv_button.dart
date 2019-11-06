@@ -126,7 +126,6 @@ class AdvButton extends StatelessWidget {
 
   Widget _buildButton(BuildContext context) {
     double borderWidth = onlyBorder ? 1.0 : 0.0;
-    double borderWidthAdditional = !onlyBorder ? 0.0 : 0.0;
     Color disableBackgroundColor =
         Color.lerp(reverse ? Colors.white : Colors.black54, lerpColor, 0.6);
     Color disableTextColor = Color.lerp(!reverse ? Colors.white : Colors.black54, lerpColor, 0.6);
@@ -139,7 +138,7 @@ class AdvButton extends StatelessWidget {
     Color _disableColor = onlyBorder ? disableTextColor : disableBackgroundColor;
     Color _disableTextColor = !onlyBorder ? disableTextColor : disableBackgroundColor;
 
-    double extraPadding = this.buttonSize == ButtonSize.large ? 14.0 : 8.0;
+    EdgeInsets finalPadding = this.padding ?? this.buttonSize == ButtonSize.large ? EdgeInsets.all(14.0) : EdgeInsets.all(8.0);
 
     return ButtonTheme(
         minWidth: 0.0,
@@ -147,11 +146,7 @@ class AdvButton extends StatelessWidget {
         child: Container(
             width: width,
             child: FlatButton(
-              padding: EdgeInsets.only(
-                  left: this.padding.left + extraPadding + borderWidthAdditional,
-                  top: this.padding.top + extraPadding + borderWidthAdditional,
-                  right: this.padding.right + extraPadding + borderWidthAdditional,
-                  bottom: this.padding.bottom + extraPadding + borderWidthAdditional),
+              padding: finalPadding,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               color: _color,
               disabledColor: _disableColor,

@@ -20,7 +20,7 @@ class AdvListTile extends StatelessWidget {
       double divider,
       this.onTap,
       this.crossAxisAlignment = CrossAxisAlignment.center})
-      : this.padding = padding ?? EdgeInsets.all(0.0),
+      : this.padding = padding ?? EdgeInsets.all(16.0),
         this.divider = divider ?? 10.0;
 
   @override

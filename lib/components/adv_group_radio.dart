@@ -17,10 +17,13 @@ class AdvGroupRadio extends StatefulWidget {
   final GroupRadioCallback callback;
 
   AdvGroupRadio(
-      {String text, Map<String, Widget> items, AdvGroupRadioController controller, this.callback})
+      {String text,
+      Map<String, Widget> items,
+      AdvGroupRadioController controller,
+      this.callback})
       : assert(controller == null || (text == null && items == null)),
-        this.controller =
-            controller ?? new AdvGroupRadioController(text: text ?? "", items: items ?? {});
+        this.controller = controller ??
+            new AdvGroupRadioController(text: text ?? "", items: items ?? {});
 
   @override
   State<StatefulWidget> createState() => _AdvGroupRadioState();
@@ -45,47 +48,49 @@ class _AdvGroupRadioState extends State<AdvGroupRadio> {
     Map<String, Widget> stringChildren = widget.controller.items;
     List<Widget> children = [];
 
-    stringChildren.keys.forEach((itemKey) {
-      children.add(Container(
-          child: AdvListTile(
-              onTap: () {
-                _text = false;
-                widget.controller.text = itemKey;
+    if (stringChildren != null)
+      stringChildren.keys.forEach((itemKey) {
+        children.add(Container(
+            child: AdvListTile(
+                onTap: () {
+                  _text = false;
+                  widget.controller.text = itemKey;
 
-                if (this.mounted)
-                  setState(() {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (this.mounted)
-                        setState(() {
-                          _text = true;
+                  if (this.mounted)
+                    setState(() {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (this.mounted)
+                          setState(() {
+                            _text = true;
 
-                          Navigator.of(context).push(PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (BuildContext context, _, __) {
-                                return Container();
-                              }));
+                            Navigator.of(context).push(PageRouteBuilder(
+                                opaque: false,
+                                pageBuilder: (BuildContext context, _, __) {
+                                  return Container();
+                                }));
 
-                          Timer(Duration(milliseconds: 300), () {
-                            Navigator.pop(context);
-                            if (widget.callback != null) widget.callback(itemKey);
+                            Timer(Duration(milliseconds: 300), () {
+                              Navigator.pop(context);
+                              if (widget.callback != null)
+                                widget.callback(itemKey);
+                            });
                           });
-                        });
+                      });
                     });
-                  });
-              },
-              padding: EdgeInsets.all(16.0),
-              expanded: stringChildren[itemKey],
-              end: itemKey == widget.controller.text
-                  ? AbsorbPointer(
-                      child: AdvCheckbox(
-                      onChanged: (value) {},
-                      value: _text,
-                      radius: Radius.circular(AdvCheckbox.width),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      activeColor: BasicComponents.groupRadio.checkColor,
-                    ))
-                  : Container())));
-    });
+                },
+                padding: EdgeInsets.all(16.0),
+                expanded: stringChildren[itemKey],
+                end: itemKey == widget.controller.text
+                    ? AbsorbPointer(
+                        child: AdvCheckbox(
+                        onChanged: (value) {},
+                        value: _text,
+                        radius: Radius.circular(AdvCheckbox.width),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        activeColor: BasicComponents.groupRadio.checkColor,
+                      ))
+                    : Container())));
+      });
 
     return Container(
       child: AdvColumn(

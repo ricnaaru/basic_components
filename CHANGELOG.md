@@ -1,3 +1,10 @@
+## [0.0.4+5] - 6 Nov 2019.
+
+* List Tile add default padding 16.0
+* Fix Adv Button typo
+* Fix Adv Radio Group when stringChildren is null
+* Fix Adv Increment without controller set amount to 0 instead of ""
+
 ## [0.0.4+4] - 6 Nov 2019.
 
 * Button Padding now is customizable from the outside

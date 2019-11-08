@@ -81,7 +81,7 @@ class _AdvIncrementState extends State<AdvIncrement> {
 
     _ctrl = widget.controller == null
         ? AdvIncrementController(
-            amount: widget.amount ?? "",
+            amount: widget.amount ?? 0,
             error: widget.decoration?.errorText,
             enabled: widget.enabled ?? true,
           )

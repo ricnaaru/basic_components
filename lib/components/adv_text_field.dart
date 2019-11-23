@@ -193,13 +193,17 @@ class _AdvTextFieldState extends State<AdvTextField> {
 
     var cursorPos = _effectiveController.selection;
     textEditingCtrl.removeListener(_updateTextEditing);
-    textEditingCtrl.text = _effectiveController.text;
 
     if (cursorPos.start > textEditingCtrl.text.length) {
       cursorPos = new TextSelection.fromPosition(
           new TextPosition(offset: textEditingCtrl.text.length));
     }
-    textEditingCtrl.selection = cursorPos;
+
+    textEditingCtrl =
+    TextEditingController(text: _effectiveController.text)
+      ..selection = cursorPos;
+    //untuk mencegah scroll focus, karena di didupdatewidget diset ulang textnya, kalo build increment di dalam scroll, akan scroll to focus dia
+
     textEditingCtrl.addListener(_updateTextEditing);
   }
 

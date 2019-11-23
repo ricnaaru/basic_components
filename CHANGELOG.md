@@ -1,3 +1,7 @@
+## [1.0.0+1] - 23 Nov 2019.
+
+* Fix textfield didupdatewidget
+
 ## [1.0.0] - 23 Nov 2019.
 
 * Stable version

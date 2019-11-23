@@ -1,5 +1,6 @@
-library text_field;
+library adv_text_field;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -94,10 +95,12 @@ class AdvTextField extends StatefulWidget {
     this.scrollController,
     this.scrollPhysics,
   }) : assert(controller == null ||
-            (text == null &&
-                decoration?.errorText == null &&
-                enabled == null &&
-                obscureText == null));
+      (text == null &&
+          decoration?.errorText == null &&
+          enabled == null &&
+          obscureText == null &&
+          decoration?.prefixIcon == null &&
+          decoration?.suffixIcon == null));
 
   @override
   _AdvTextFieldState createState() => _AdvTextFieldState();
@@ -118,6 +121,8 @@ class _AdvTextFieldState extends State<AdvTextField> {
       error: widget.decoration?.errorText,
       enabled: widget.enabled ?? true,
       obscureText: widget.obscureText ?? false,
+      prefixIcon: widget.decoration?.prefixIcon,
+      suffixIcon: widget.decoration?.suffixIcon,
     )
         : null;
 
@@ -131,15 +136,41 @@ class _AdvTextFieldState extends State<AdvTextField> {
   _updateTextEditing() {
     _effectiveController.removeListener(_update);
     _effectiveController.text = textEditingCtrl.text;
+
+    if (textEditingCtrl.selection != _effectiveController.selection &&
+        textEditingCtrl.selection.start <=
+            (_effectiveController.text?.length ?? 0) &&
+        textEditingCtrl.selection.end <=
+            (_effectiveController.text?.length ?? 0)) {
+      _effectiveController.selection = textEditingCtrl.selection;
+    }
+
     _effectiveController.addListener(_update);
   }
 
   _update() {
+    _effectiveController.removeListener(_update);
+
+    var cursorPos = _effectiveController.selection;
     textEditingCtrl.removeListener(_updateTextEditing);
     textEditingCtrl.text = _effectiveController.text;
-    textEditingCtrl.addListener(_updateTextEditing);
 
-    if (this.mounted) setState(() {});
+    if (cursorPos == null || cursorPos.start > textEditingCtrl.text.length) {
+      cursorPos = new TextSelection.fromPosition(
+          new TextPosition(offset: textEditingCtrl.text.length));
+      if (_effectiveController.selection == null)
+        _effectiveController.selection = cursorPos;
+    }
+
+    textEditingCtrl.selection = cursorPos;
+
+    textEditingCtrl.addListener(_updateTextEditing);
+    _effectiveController.addListener(_update);
+
+    if (this.mounted)
+      setState(() {
+        textEditingCtrl.selection = cursorPos;
+      });
   }
 
   @override
@@ -147,24 +178,44 @@ class _AdvTextFieldState extends State<AdvTextField> {
     super.didUpdateWidget(oldWidget);
     if (widget.controller == null && oldWidget.controller != null)
       _ctrl = AdvTextFieldController.fromValue(oldWidget.controller.value);
-    else if (widget.controller != null && oldWidget.controller == null) _ctrl = null;
+    else if (widget.controller != null && oldWidget.controller == null)
+      _ctrl = null;
 
-    _effectiveController.removeListener(_update);
+    if (textEditingCtrl.selection != _effectiveController.selection &&
+        textEditingCtrl.selection.start <=
+            (_effectiveController.text?.length ?? 0) &&
+        textEditingCtrl.selection.end <=
+            (_effectiveController.text?.length ?? 0)) {
+      _effectiveController.removeListener(_update);
+      _effectiveController.selection = textEditingCtrl.selection;
+      _effectiveController.addListener(_update);
+    }
+
+    var cursorPos = _effectiveController.selection;
     textEditingCtrl.removeListener(_updateTextEditing);
     textEditingCtrl.text = _effectiveController.text;
+
+    if (cursorPos.start > textEditingCtrl.text.length) {
+      cursorPos = new TextSelection.fromPosition(
+          new TextPosition(offset: textEditingCtrl.text.length));
+    }
+    textEditingCtrl.selection = cursorPos;
     textEditingCtrl.addListener(_updateTextEditing);
-    _effectiveController.addListener(_update);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_effectiveController.selection.start <= textEditingCtrl.text.length) {
+      textEditingCtrl.selection = _effectiveController.selection;
+    }
     InputDecoration decoration = widget.decoration ?? InputDecoration();
     ThemeData themeData = Theme.of(context);
     double width;
     if (widget.measureText != null) {
       var tp = new TextPainter(
           text: TextSpan(
-              text: widget.measureText, style: (widget.style ?? themeData.textTheme.subhead)),
+              text: widget.measureText,
+              style: (widget.style ?? themeData.textTheme.subhead)),
           textDirection: TextDirection.ltr);
 
       tp.layout();
@@ -179,7 +230,11 @@ class _AdvTextFieldState extends State<AdvTextField> {
         key: widget.key,
         controller: textEditingCtrl,
         focusNode: widget.focusNode,
-        decoration: decoration.copyWith(errorText: _effectiveController.error),
+        decoration: decoration.copyWith(
+          errorText: _effectiveController.error,
+          prefixIcon: _effectiveController.prefixIcon,
+          suffixIcon: _effectiveController.suffixIcon,
+        ),
         keyboardType: widget.keyboardType,
         textInputAction: widget.textInputAction,
         textCapitalization: widget.textCapitalization,
@@ -199,7 +254,10 @@ class _AdvTextFieldState extends State<AdvTextField> {
         expands: widget.expands,
         maxLength: widget.maxLength,
         maxLengthEnforced: widget.maxLengthEnforced,
-        onChanged: widget.onChanged,
+        onChanged: (s) {
+          _effectiveController.error = null;
+          if (widget.onChanged != null) widget.onChanged(s);
+        },
         onEditingComplete: widget.onEditingComplete,
         onSubmitted: widget.onSubmitted,
         inputFormatters: widget.inputFormatters,

@@ -6,6 +6,7 @@ import 'package:basic_components/components/adv_group_radio.dart';
 import 'package:basic_components/components/adv_increment.dart';
 import 'package:basic_components/components/adv_row.dart';
 import 'package:basic_components/components/adv_text_field.dart';
+import 'package:basic_components/utilities/toast.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -34,22 +35,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   AdvTextFieldController controller = AdvTextFieldController();
-  AdvIncrementController incrementController = AdvIncrementController(amount: 10);
+  AdvIncrementController incrementController =
+      AdvIncrementController(amount: 10);
   AdvDatePickerController dateController = AdvDatePickerController(
     minDate: DateTime.now(),
     maxDate: DateTime.now().add(Duration(days: 30)),
   );
 
-  AdvGroupRadioController groupRadioController = AdvGroupRadioController(text: "Test1", items: {
+  AdvGroupRadioController groupRadioController =
+      AdvGroupRadioController(text: "Test1", items: {
     "Test1": Icon(Icons.edit_attributes),
     "Test2": Icon(Icons.speaker_notes),
     "Test3": Icon(Icons.speaker_notes_off),
   });
 
-  AdvGroupCheckController groupCheckController = AdvGroupCheckController(items: [
-    AdvGroupCheckItem(value: "Test1", display: Icon(Icons.edit_attributes), isChecked: false),
-    AdvGroupCheckItem(value: "Test2", display: Icon(Icons.speaker_notes), isChecked: false),
-    AdvGroupCheckItem(value: "Test3", display: Icon(Icons.speaker_notes_off), isChecked: false),
+  AdvGroupCheckController groupCheckController =
+      AdvGroupCheckController(items: [
+    AdvGroupCheckItem(
+        value: "Test1", display: Icon(Icons.edit_attributes), isChecked: false),
+    AdvGroupCheckItem(
+        value: "Test2", display: Icon(Icons.speaker_notes), isChecked: false),
+    AdvGroupCheckItem(
+        value: "Test3",
+        display: Icon(Icons.speaker_notes_off),
+        isChecked: false),
   ]);
 
   @override
@@ -66,19 +75,19 @@ class _MyHomePageState extends State<MyHomePage> {
             divider: ColumnDivider(16.0),
             children: [
               AdvTextField(
-                controller: controller,
+                controller: controller
+                  ..prefixIcon = Material(
+                      child: InkWell(
+                    child: Icon(Icons.add),
+                    onTap: () {
+                      Toast.showToast(context, "I'm Tapped!");
+                    },
+                  )),
                 minLines: 3,
                 maxLines: 4,
                 decoration: InputDecoration(
                   hintText: "Text \n lalala",
                   prefix: Text("Prefix"),
-                  prefixIcon: Material(
-                      child: InkWell(
-                    child: Icon(Icons.add),
-                    onTap: () {
-                      print("makan siang");
-                    },
-                  )),
                   isDense: true,
                   helperText: "This is Helper Text",
                 ),
@@ -93,10 +102,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   prefixIcon: Icon(Icons.add),
                   helperText: "This is Helper Text",
                   contentPadding: EdgeInsets.all(8.0),
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.green)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.green)),
                   filled: true,
-                  enabledBorder:
-                      OutlineInputBorder(borderSide: BorderSide(width: 5.0, color: Colors.red)),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 5.0, color: Colors.red)),
                   errorBorder: InputBorder.none,
                   focusedErrorBorder: InputBorder.none,
                   fillColor: Colors.white,
@@ -188,11 +198,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.white,
                   child: AdvIncrement(
                     margin: EdgeInsets.all(16.0),
-                    decoration: InputDecoration(contentPadding: EdgeInsets.all(8.0)),
+                    decoration:
+                        InputDecoration(contentPadding: EdgeInsets.all(8.0)),
                     measureText: "@@@",
                     textAlign: TextAlign.center,
                     controller: incrementController,
                     addButtonColor: Colors.blue,
+                    style: TextStyle(fontSize: 16),
                     addButtonShapeBorder: CircleBorder(side: BorderSide()),
                   ),
                 ),
@@ -200,14 +212,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.white,
                   child: AdvDatePicker(
                     margin: EdgeInsets.all(8.0),
-                    decoration:
-                        InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 8.0)),
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 0.0)),
                     measureText: "23-10-2019",
+                    style: TextStyle(fontSize: 25),
                     textAlign: TextAlign.center,
                     controller: dateController,
-                    onChanged: (dates) {
-                      print("dates => $dates");
-                    },
+                    onChanged: (dates) {},
                   ),
                 ),
               ]),
@@ -228,20 +239,5 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
-  }
-
-  apaBedanya({bool f = true}) {
-    print("apaBedanya $f");
-  }
-}
-
-class ApaBedanya {
-  final bool a;
-  final bool b;
-
-  ApaBedanya({this.a = false, bool b}) : this.b = b ?? false;
-
-  apaYa() {
-    print("a = $a\nb = $b");
   }
 }

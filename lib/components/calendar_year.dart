@@ -1,4 +1,4 @@
-part of date_picker;
+part of adv_date_picker;
 
 class YearCalendar extends StatefulWidget {
   final BuildContext mainContext;

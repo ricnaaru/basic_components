@@ -1,4 +1,4 @@
-part of date_picker;
+part of adv_date_picker;
 
 enum SelectionType { single, multi, range }
 

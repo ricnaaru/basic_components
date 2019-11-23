@@ -1,6 +1,6 @@
-part of increment;
+part of adv_increment;
 
-class AdvIncrementController extends ValueNotifier<TextFieldValue> {
+class AdvIncrementController extends ValueNotifier<AdvIncrementValue> {
   num get amount => value.amount;
 
   set amount(num newAmount) {
@@ -10,6 +10,7 @@ class AdvIncrementController extends ValueNotifier<TextFieldValue> {
       maxAmount: this.maxAmount,
       error: this.error,
       enabled: this.enabled,
+      selection: this.selection,
     );
   }
 
@@ -22,6 +23,7 @@ class AdvIncrementController extends ValueNotifier<TextFieldValue> {
       maxAmount: this.maxAmount,
       error: this.error,
       enabled: this.enabled,
+      selection: this.selection,
     );
   }
 
@@ -34,6 +36,7 @@ class AdvIncrementController extends ValueNotifier<TextFieldValue> {
       maxAmount: newMaxAmount,
       error: this.error,
       enabled: this.enabled,
+      selection: this.selection,
     );
   }
 
@@ -46,6 +49,7 @@ class AdvIncrementController extends ValueNotifier<TextFieldValue> {
       maxAmount: this.maxAmount,
       error: newError,
       enabled: this.enabled,
+      selection: this.selection,
     );
   }
 
@@ -58,7 +62,23 @@ class AdvIncrementController extends ValueNotifier<TextFieldValue> {
       maxAmount: this.maxAmount,
       error: this.error,
       enabled: newenabled,
+      selection: this.selection,
     );
+  }
+
+  TextSelection get selection => value.selection;
+
+  set selection(TextSelection newSelection) {
+    if (newSelection.start > ((amount ?? 0).toString().length ?? 0) ||
+        newSelection.end > ((amount ?? 0).toString().length ?? 0))
+      throw FlutterError('invalid text selection: $newSelection');
+    value = value.copyWith(
+      amount: this.amount,
+      minAmount: this.minAmount,
+      maxAmount: this.maxAmount,
+      error: this.error,
+      enabled: this.enabled,
+      selection: newSelection,);
   }
 
   AdvIncrementController({
@@ -67,32 +87,36 @@ class AdvIncrementController extends ValueNotifier<TextFieldValue> {
     num maxAmount,
     String error,
     bool enabled,
-  }) : super(amount == null && error == null && enabled == null
-            ? TextFieldValue.empty
-            : new TextFieldValue(
+    TextSelection selection,
+  }) : super(amount == null && minAmount == null && maxAmount == null && error == null && enabled == null && selection == null
+      ? AdvIncrementValue.empty
+      : new AdvIncrementValue(
     amount: amount,
     minAmount: minAmount,
     maxAmount: maxAmount,
-                error: error,
-                enabled: enabled ?? true,
-              ));
+    error: error,
+    enabled: enabled ?? true,
+    selection: selection =
+    const TextSelection.collapsed(offset: -1),
+  ));
 
-  AdvIncrementController.fromValue(TextFieldValue value)
-      : super(value ?? TextFieldValue.empty);
+  AdvIncrementController.fromValue(AdvIncrementValue value)
+      : super(value ?? AdvIncrementValue.empty);
 
   void clear() {
-    value = TextFieldValue.empty;
+    value = AdvIncrementValue.empty;
   }
 }
 
 @immutable
-class TextFieldValue {
-  const TextFieldValue({
+class AdvIncrementValue {
+  const AdvIncrementValue({
     this.amount,
     this.minAmount,
     this.maxAmount,
     this.error,
     this.enabled = true,
+    this.selection = const TextSelection.collapsed(offset: -1),
   });
 
   final num amount;
@@ -100,46 +124,56 @@ class TextFieldValue {
   final num maxAmount;
   final String error;
   final bool enabled;
+  final TextSelection selection;
 
-  static const TextFieldValue empty = const TextFieldValue();
+  static const AdvIncrementValue empty = const AdvIncrementValue();
 
-  TextFieldValue copyWith({
+  AdvIncrementValue copyWith({
     num amount,
     num minAmount,
     num maxAmount,
     String error,
     bool enabled,
+    TextSelection selection,
   }) {
-    return new TextFieldValue(
+    return new AdvIncrementValue(
       amount: amount,
       minAmount: minAmount,
       maxAmount: maxAmount,
       error: error,
       enabled: enabled,
+      selection: selection,
     );
   }
 
-  TextFieldValue.fromValue(TextFieldValue copy)
+  AdvIncrementValue.fromValue(AdvIncrementValue copy)
       : this.amount = copy.amount,
         this.minAmount = copy.minAmount,
         this.maxAmount = copy.maxAmount,
         this.error = copy.error,
-        this.enabled = copy.enabled;
+        this.enabled = copy.enabled,
+        this.selection = copy.selection;
 
   @override
   String toString() =>
-      '$runtimeType(amount: \u2524$amount\u251C, minAmount: \u2524$minAmount\u251C, maxAmount: \u2524$maxAmount\u251C, \u2524$error\u251C, enabled: $enabled)';
+      '$runtimeType(amount: \u2524$amount\u251C, '
+          'minAmount: \u2524$minAmount\u251C, '
+          'maxAmount: \u2524$maxAmount\u251C, '
+          '\u2524$error\u251C, '
+          'enabled: $enabled, '
+          'selection: $selection)';
 
   @override
   bool operator ==(dynamic other) {
     if (identical(this, other)) return true;
-    if (other is! TextFieldValue) return false;
-    final TextFieldValue typedOther = other;
+    if (other is! AdvIncrementValue) return false;
+    final AdvIncrementValue typedOther = other;
     return typedOther.amount == amount &&
         typedOther.minAmount == minAmount &&
         typedOther.maxAmount == maxAmount &&
         typedOther.error == error &&
-        typedOther.enabled == enabled;
+        typedOther.enabled == enabled &&
+        typedOther.selection == selection;
   }
 
   @override
@@ -148,5 +182,6 @@ class TextFieldValue {
       minAmount.hashCode,
       maxAmount.hashCode,
       error.hashCode,
-      enabled.hashCode);
+      enabled.hashCode,
+      selection.hashCode);
 }

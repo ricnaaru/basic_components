@@ -1,10 +1,9 @@
+import 'package:basic_components/helper/theme_helper.dart';
 import 'package:flutter/material.dart';
 
 import '../basic_components.dart';
 
 enum ButtonSize { small, large }
-
-final Color lerpColor = Color(0xffD1D1D1);
 
 class AdvButton extends StatelessWidget {
   final Widget child;

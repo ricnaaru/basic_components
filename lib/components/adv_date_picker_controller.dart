@@ -1,4 +1,4 @@
-part of date_picker;
+part of adv_date_picker;
 
 class AdvDatePickerController extends ValueNotifier<AdvDatePickerValue> {
   DateTime get date => value.date;

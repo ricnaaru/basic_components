@@ -1,4 +1,4 @@
-part of date_picker;
+part of adv_date_picker;
 
 const int _kAnimationDuration = 300;
 

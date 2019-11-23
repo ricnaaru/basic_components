@@ -1,28 +1,25 @@
-library date_picker;
+library adv_date_picker;
 
 import 'dart:ui' as ui;
-import 'dart:math';
 
-import 'package:intl/intl.dart' show DateFormat;
 import 'package:basic_components/basic_components.dart';
+import 'package:basic_components/components/adv_button.dart';
 import 'package:basic_components/components/adv_column.dart';
-import 'package:basic_components/utilities/string_helper.dart';
 import 'package:basic_components/components/adv_row.dart';
 import 'package:basic_components/components/adv_visibility.dart';
-import 'package:basic_components/components/adv_button.dart';
+import 'package:basic_components/helper/string_helper.dart';
+import 'package:basic_components/helper/theme_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
-part "adv_date_picker_controller.dart";
+import 'adv_column.dart';
 
-part "calendar_page.dart";
-
+part 'adv_date_picker_controller.dart';
 part "calendar_carousel.dart";
-
 part "calendar_day.dart";
-
 part "calendar_month.dart";
-
+part "calendar_page.dart";
 part "calendar_year.dart";
 
 typedef String OnDatePicked(List<DateTime> dates);
@@ -115,7 +112,9 @@ class AdvDatePicker extends StatefulWidget {
                 dates == null &&
                 decoration?.errorText == null &&
                 enabled == null)),
-        assert((minDate != null && maxDate != null && minDate.compareTo(maxDate) <= 0) ||
+        assert((minDate != null &&
+                maxDate != null &&
+                minDate.compareTo(maxDate) <= 0) ||
             !(minDate != null && maxDate != null)),
         this.dateFormat = dateFormat ?? BasicComponents.datePicker.dateFormat;
 
@@ -162,7 +161,8 @@ class AdvDatePicker extends StatefulWidget {
 }
 
 class _AdvDatePickerState extends State<AdvDatePicker> {
-  AdvDatePickerController get _effectiveController => widget.controller ?? _ctrl;
+  AdvDatePickerController get _effectiveController =>
+      widget.controller ?? _ctrl;
 
   AdvDatePickerController _ctrl;
 
@@ -191,21 +191,27 @@ class _AdvDatePickerState extends State<AdvDatePicker> {
   @override
   void didUpdateWidget(AdvDatePicker oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (widget.controller == null && oldWidget.controller != null)
       _ctrl = AdvDatePickerController.fromValue(oldWidget.controller.value);
-    else if (widget.controller != null && oldWidget.controller == null) _ctrl = null;
+    else if (widget.controller != null && oldWidget.controller == null)
+      _ctrl = null;
   }
 
   @override
   Widget build(BuildContext context) {
     DateFormat df = DateFormat(widget.dateFormat);
     TextEditingController textEditingCtrl = new TextEditingController(
-        text: _effectiveController.date == null ? "" : df.format(_effectiveController.date));
+        text: _effectiveController.date == null
+            ? ""
+            : df.format(_effectiveController.date));
 
     InputDecoration decoration = widget.decoration ?? InputDecoration();
     ThemeData themeData = Theme.of(context);
-    double fontSize = (widget.style?.fontSize ?? themeData.textTheme.subhead.fontSize);
-    double iconSize = fontSize / 14.0 * 20.0;
+    double fontSize =
+        (widget.style?.fontSize ?? themeData.textTheme.subhead.fontSize);
+//    print("$fontSize / 14.0 * 20.0");
+    double iconSize = fontSize / 14.0 * 16.0;
     double verticalContentPadding = fontSize / 14.0 * 10.0;
     double leftContentPadding = fontSize / 14.0 * 8.0;
     double rightContentPadding = fontSize / 14.0 * 32.0;
@@ -261,7 +267,8 @@ class _AdvDatePickerState extends State<AdvDatePicker> {
     if (widget.measureText != null) {
       var tp = new TextPainter(
           text: TextSpan(
-              text: widget.measureText, style: (widget.style ?? themeData.textTheme.subhead)),
+              text: widget.measureText,
+              style: (widget.style ?? themeData.textTheme.subhead)),
           textDirection: TextDirection.ltr);
 
       tp.layout();
@@ -269,7 +276,7 @@ class _AdvDatePickerState extends State<AdvDatePicker> {
       width = tp.width +
           (fontSize + (paddingSize * 2)) +
           (edgeMargin) +
-          leftContentPadding; //rightContentPadding sudah diwakilkan oleh (fontSize + (paddingSize * 2))
+          leftContentPadding + definedPadding?.horizontal; //rightContentPadding sudah diwakilkan oleh (fontSize + (paddingSize * 2))
     }
 
     return Container(

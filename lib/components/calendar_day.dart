@@ -1,4 +1,4 @@
-part of date_picker;
+part of adv_date_picker;
 
 class DayCalendar extends StatefulWidget {
   final BuildContext mainContext;
@@ -110,9 +110,6 @@ class DayCalendarState extends State<DayCalendar> {
 
   @override
   Widget build(BuildContext parentContext) {
-//    timeDilation = 5.0;
-
-  print("build");
     Widget dayContent = widget.isLandscape
         ? _buildDayContentLandscape(parentContext)
         : _buildDayContentPortrait(parentContext);
@@ -254,7 +251,6 @@ class DayCalendarState extends State<DayCalendar> {
                   },
                   controller: _pageCtrl,
                   itemBuilder: (context, index) {
-                    print("itemBuilder => $index");
                     return _buildCalendarLandscape(index);
                   },
                 ),
@@ -774,7 +770,6 @@ class DayCalendarState extends State<DayCalendar> {
   }
 
   void _setPage({int page}) {
-    print("_setPage => $page");
     /// for initial set
     if (page == null) {
       DateTime selectedDate = _selectedDateTimes != null && _selectedDateTimes.length > 0

@@ -1,3 +1,12 @@
+## [1.0.0] - 23 Nov 2019.
+
+* Stable version
+* Fix chooser and add intentType page and bottomsheet
+* Fix datepicker
+* Fix groupcheck
+* Fix increment
+* Add link and theme helper
+
 ## [0.0.4+5] - 6 Nov 2019.
 
 * List Tile add default padding 16.0

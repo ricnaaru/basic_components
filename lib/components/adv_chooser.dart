@@ -1,17 +1,22 @@
-library chooser;
+library adv_chooser;
 
+import 'package:basic_components/basic_components.dart';
 import 'package:basic_components/components/adv_group_radio.dart';
 import 'package:basic_components/components/adv_list_tile.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-part "adv_chooser_controller.dart";
+part 'adv_chooser_controller.dart';
+
+part 'adv_chooser_page.dart';
+
+enum IntentType { bottomSheet, page }
 
 class AdvChooser extends StatefulWidget {
   final Key key;
   final String text;
   final Map<String, String> items;
-  final ChooserController controller;
+  final AdvChooserController controller;
   final FocusNode focusNode;
   final InputDecoration decoration;
   final TextStyle style;
@@ -39,6 +44,7 @@ class AdvChooser extends StatefulWidget {
   final InputCounterWidgetBuilder buildCounter;
   final ScrollController scrollController;
   final ScrollPhysics scrollPhysics;
+  final IntentType intentType;
 
   AdvChooser({
     this.key,
@@ -72,18 +78,23 @@ class AdvChooser extends StatefulWidget {
     this.buildCounter,
     this.scrollController,
     this.scrollPhysics,
-  }) : assert(controller == null ||
-            (text == null && items == null && decoration?.errorText == null && enabled == null));
+    IntentType intentType,
+  })  : this.intentType = intentType ?? IntentType.page,
+        assert(controller == null ||
+            (text == null &&
+                items == null &&
+                decoration?.errorText == null &&
+                enabled == null));
 
   @override
   _AdvChooserState createState() => _AdvChooserState();
 
-  static Future<String> pickFromChooser(
-      BuildContext context, {
-        String title = "",
-        Map<String, String> items,
-        String currentItem = "",
-      }) async {
+  static Future<String> chooseFromBottomSheet(
+    BuildContext context, {
+    String title = "",
+    Map<String, String> items,
+    String currentItem = "",
+  }) async {
     assert(items != null);
 
     Map<String, Widget> groupRadioItems = items.map((key, value) {
@@ -91,7 +102,7 @@ class AdvChooser extends StatefulWidget {
     });
 
     AdvGroupRadioController controller =
-    AdvGroupRadioController(text: currentItem, items: groupRadioItems);
+        AdvGroupRadioController(text: currentItem, items: groupRadioItems);
 
     return await showModalBottomSheet(
         context: context,
@@ -102,8 +113,9 @@ class AdvChooser extends StatefulWidget {
               AdvListTile(
                 padding: EdgeInsets.all(16.0),
                 start: Icon(Icons.close),
-                expanded:
-                Text(title, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700)),
+                expanded: Text(title,
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700)),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -123,19 +135,37 @@ class AdvChooser extends StatefulWidget {
           );
         });
   }
+
+  static Future<String> chooseFromPage(
+    BuildContext context, {
+    String title = "",
+    Map<String, String> items,
+    String currentItem = "",
+  }) async {
+    assert(items != null);
+
+    return await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AdvChooserPage(
+                  title: title,
+                  items: items,
+                  currentItem: currentItem,
+                )));
+  }
 }
 
 class _AdvChooserState extends State<AdvChooser> {
-  ChooserController get _effectiveController => widget.controller ?? _ctrl;
+  AdvChooserController get _effectiveController => widget.controller ?? _ctrl;
 
-  ChooserController _ctrl;
+  AdvChooserController _ctrl;
 
   @override
   void initState() {
     super.initState();
 
     _ctrl = widget.controller == null
-        ? ChooserController(
+        ? AdvChooserController(
             text: widget.text ?? "",
             items: widget.items,
             error: widget.decoration?.errorText,
@@ -154,14 +184,17 @@ class _AdvChooserState extends State<AdvChooser> {
   void didUpdateWidget(AdvChooser oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller == null && oldWidget.controller != null)
-      _ctrl = ChooserController.fromValue(oldWidget.controller.value);
-    else if (widget.controller != null && oldWidget.controller == null) _ctrl = null;
+      _ctrl = AdvChooserController.fromValue(oldWidget.controller.value);
+    else if (widget.controller != null && oldWidget.controller == null)
+      _ctrl = null;
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController textEditingCtrl =
-        new TextEditingController(text: _effectiveController.text);
+    TextEditingController textEditingCtrl = new TextEditingController(
+        text: _effectiveController.items == null
+            ? ""
+            : _effectiveController.items[_effectiveController.text]);
 
     textEditingCtrl.addListener(() {
       _effectiveController.removeListener(_update);
@@ -171,12 +204,12 @@ class _AdvChooserState extends State<AdvChooser> {
 
     InputDecoration decoration = widget.decoration ?? InputDecoration();
     ThemeData themeData = Theme.of(context);
-    double fontSize = (widget.style?.fontSize ?? themeData.textTheme.subhead.fontSize);
-    double iconSize = fontSize / 14.0 * 20.0;
-    double verticalContentPadding = fontSize / 14.0 * 10.0;
-    double rightContentPadding = fontSize / 14.0 * 38.0;
-    double paddingSize = fontSize / 14.0 * 8.0;
-    double edgeMargin = fontSize / 14.0 * 4.0;
+    double fontSize =
+        (widget.style?.fontSize ?? themeData.textTheme.subhead.fontSize);
+    double iconSize = fontSize / 14.0 * 30.0;
+    double paddingSize = fontSize / 14.0 * 0.0;
+    double rightContentPadding =
+        iconSize + (paddingSize * 1); //fontSize / 14.0 * 38.0;
 
     TextField textField = TextField(
       key: widget.key,
@@ -184,14 +217,14 @@ class _AdvChooserState extends State<AdvChooser> {
       focusNode: widget.focusNode,
       decoration: decoration.copyWith(
         errorText: _effectiveController.error,
-        contentPadding: EdgeInsets.symmetric(
-          vertical: verticalContentPadding,
-        ).copyWith(
+        contentPadding: EdgeInsets.only(
+          top: 12.0,
+          bottom: 8.0,
           right: rightContentPadding,
         ),
       ),
       style: widget.style,
-      strutStyle: widget.strutStyle,
+      strutStyle: StrutStyle(height: 1.4),
       textAlign: widget.textAlign,
       textAlignVertical: widget.textAlignVertical,
       textDirection: widget.textDirection,
@@ -224,28 +257,47 @@ class _AdvChooserState extends State<AdvChooser> {
       children: [
         textField,
         Positioned(
-          right: edgeMargin,
-          top: 0.0,
-          bottom: 0.0,
-          child: Container(
-              width: fontSize + (paddingSize * 2),
-              height: fontSize + (paddingSize * 2),
-              padding: EdgeInsets.all(paddingSize),
-              child: Icon(Icons.arrow_drop_down, size: iconSize)),
-        ),
+            right: 0.0,
+            top: 0.0,
+            bottom: 0.0,
+            child: IgnorePointer(
+              child: Container(
+//            alignment: Alignment.topCenter,
+//            color: Colors.amber,
+                  width: iconSize + (paddingSize * 1),
+                  height: iconSize + (paddingSize * 2),
+                  padding: EdgeInsets.all(paddingSize).copyWith(right: 0.0),
+                  child: Icon(
+                    Icons.arrow_drop_down,
+                    size: iconSize,
+                    color: BasicComponents.chooser.iconColor,
+                  )),
+            )),
       ],
     );
   }
 
   void _onTap() {
     if (!_effectiveController.enabled) return;
-    AdvChooser.pickFromChooser(
-      context,
-      title: "widget.controller.label",
-      items: _effectiveController.items,
-      currentItem: _effectiveController.text,
-    ).then((picked) {
-      if (picked != null) _effectiveController.text = picked;
-    });
+
+    if (widget.intentType == IntentType.bottomSheet) {
+      AdvChooser.chooseFromBottomSheet(
+        context,
+        title: widget.decoration?.labelText ?? "Title",
+        items: _effectiveController.items,
+        currentItem: _effectiveController.text,
+      ).then((picked) {
+        if (picked != null) _effectiveController.text = picked;
+      });
+    } else if (widget.intentType == IntentType.page) {
+      AdvChooser.chooseFromPage(
+        context,
+        title: widget.decoration?.labelText ?? "Title",
+        items: _effectiveController.items,
+        currentItem: _effectiveController.text,
+      ).then((picked) {
+        if (picked != null) _effectiveController.text = picked;
+      });
+    }
   }
 }

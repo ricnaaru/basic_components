@@ -1,6 +1,6 @@
-part of chooser;
+part of adv_chooser;
 
-class ChooserController extends ValueNotifier<ChooserValue> {
+class AdvChooserController extends ValueNotifier<AdvChooserValue> {
   String get text => value.text;
 
   set text(String newText) {
@@ -61,7 +61,7 @@ class ChooserController extends ValueNotifier<ChooserValue> {
     );
   }
 
-  ChooserController({
+  AdvChooserController({
     String text,
     Map<String, String> items,
     String error,
@@ -69,8 +69,8 @@ class ChooserController extends ValueNotifier<ChooserValue> {
     bool obscureText,
   }) : super(
             text == null && items == null && error == null && enabled == null && obscureText == null
-                ? ChooserValue.empty
-                : new ChooserValue(
+                ? AdvChooserValue.empty
+                : new AdvChooserValue(
                     text: text,
                     items: items,
                     error: error,
@@ -78,16 +78,16 @@ class ChooserController extends ValueNotifier<ChooserValue> {
                     obscureText: obscureText ?? false,
                   ));
 
-  ChooserController.fromValue(ChooserValue value) : super(value ?? ChooserValue.empty);
+  AdvChooserController.fromValue(AdvChooserValue value) : super(value ?? AdvChooserValue.empty);
 
   void clear() {
-    value = ChooserValue.empty;
+    value = AdvChooserValue.empty;
   }
 }
 
 @immutable
-class ChooserValue {
-  const ChooserValue({
+class AdvChooserValue {
+  const AdvChooserValue({
     this.text = '',
     this.items,
     this.error,
@@ -101,16 +101,16 @@ class ChooserValue {
   final bool enabled;
   final bool obscureText;
 
-  static const ChooserValue empty = const ChooserValue();
+  static const AdvChooserValue empty = const AdvChooserValue();
 
-  ChooserValue copyWith({
+  AdvChooserValue copyWith({
     String text,
     Map<String, String> items,
     String error,
     bool enabled,
     bool obscureText,
   }) {
-    return new ChooserValue(
+    return new AdvChooserValue(
       text: text,
       items: items,
       error: error,
@@ -119,7 +119,7 @@ class ChooserValue {
     );
   }
 
-  ChooserValue.fromValue(ChooserValue copy)
+  AdvChooserValue.fromValue(AdvChooserValue copy)
       : this.text = copy.text,
         this.items = copy.items,
         this.error = copy.error,
@@ -133,8 +133,8 @@ class ChooserValue {
   @override
   bool operator ==(dynamic other) {
     if (identical(this, other)) return true;
-    if (other is! ChooserValue) return false;
-    final ChooserValue typedOther = other;
+    if (other is! AdvChooserValue) return false;
+    final AdvChooserValue typedOther = other;
     return typedOther.text == text &&
         typedOther.items == items &&
         typedOther.error == error &&

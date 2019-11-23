@@ -31,7 +31,6 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
   @override
   void initState() {
     widget.controller.addListener(() {
-      print("testtest");
       if (this.mounted) {
         setState(() {});
       }
@@ -64,7 +63,6 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
                     _timer.cancel();
                   }
                   _timer = Timer(Duration(milliseconds: 3000), () {
-                    print("tick! ${DateTime.now()}");
                     _timer = null;
 //                            Navigator.pop(context);
 //                            if (widget.callback != null) widget.callback(itemKey);
@@ -87,7 +85,6 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
 
     return WillPopScope(
       onWillPop: () async {
-        print("test ${DateTime.now()}");
         return _timer == null;
       },
       child: Container(

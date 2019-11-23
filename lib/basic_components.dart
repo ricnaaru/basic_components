@@ -6,6 +6,11 @@ class BasicComponents {
   static _DatePicker datePicker = _DatePicker();
   static _Button button = _Button();
   static _Loading loading = _Loading();
+  static _Chooser chooser = _Chooser();
+}
+
+class _Chooser {
+  Color iconColor = Colors.black;
 }
 
 class _GroupCheck {

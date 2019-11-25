@@ -1,3 +1,7 @@
+## [1.0.0+2] - 25 Nov 2019.
+
+* Fix chooser padding issues
+
 ## [1.0.0+1] - 23 Nov 2019.
 
 * Fix textfield didupdatewidget

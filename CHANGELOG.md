@@ -1,3 +1,7 @@
+## [1.0.0+3] - 2 Des 2019.
+
+* Fix increment min amount issue
+
 ## [1.0.0+2] - 25 Nov 2019.
 
 * Fix chooser padding issues

@@ -321,13 +321,13 @@ class _AdvIncrementState extends State<AdvIncrement> {
                 child: InkWell(
                     onTap: _effectiveController.enabled
                         ? () {
-                            int amount = _effectiveController.amount;
-                            int maxAmount = _effectiveController.maxAmount;
+                            int amount = _effectiveController.amount ?? 0;
+                            int minAmount = _effectiveController.minAmount;
 
                             _effectiveController.error = null;
                             if (amount != null &&
-                                maxAmount != null &&
-                                maxAmount <= amount) return;
+                                minAmount != null &&
+                                minAmount <= amount) return;
                             _effectiveController.amount =
                                 (amount ?? 0) - 1;
                             if (widget.onChanged != null)
@@ -360,7 +360,7 @@ class _AdvIncrementState extends State<AdvIncrement> {
                 child: InkWell(
                     onTap: _effectiveController.enabled
                         ? () {
-                            int amount = _effectiveController.amount;
+                            int amount = _effectiveController.amount ?? 0;
                             int maxAmount = _effectiveController.maxAmount;
 
                             _effectiveController.error = null;

@@ -1,3 +1,8 @@
+## [1.0.0+4] - 2 Des 2019.
+
+* Add clear focus when button is pressed
+* Fix Chooser drop icon position when errors
+
 ## [1.0.0+3] - 2 Des 2019.
 
 * Fix increment min amount issue

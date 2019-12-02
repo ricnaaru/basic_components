@@ -7,7 +7,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 part 'adv_chooser_controller.dart';
-
 part 'adv_chooser_page.dart';
 
 enum IntentType { bottomSheet, page }
@@ -90,11 +89,11 @@ class AdvChooser extends StatefulWidget {
   _AdvChooserState createState() => _AdvChooserState();
 
   static Future<String> chooseFromBottomSheet(
-      BuildContext context, {
-        String title = "",
-        Map<String, String> items,
-        String currentItem = "",
-      }) async {
+    BuildContext context, {
+    String title = "",
+    Map<String, String> items,
+    String currentItem = "",
+  }) async {
     assert(items != null);
 
     Map<String, Widget> groupRadioItems = items.map((key, value) {
@@ -102,7 +101,7 @@ class AdvChooser extends StatefulWidget {
     });
 
     AdvGroupRadioController controller =
-    AdvGroupRadioController(text: currentItem, items: groupRadioItems);
+        AdvGroupRadioController(text: currentItem, items: groupRadioItems);
 
     return await showModalBottomSheet(
         context: context,
@@ -115,7 +114,7 @@ class AdvChooser extends StatefulWidget {
                 start: Icon(Icons.close),
                 expanded: Text(title,
                     style:
-                    TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700)),
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700)),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -137,21 +136,21 @@ class AdvChooser extends StatefulWidget {
   }
 
   static Future<String> chooseFromPage(
-      BuildContext context, {
-        String title = "",
-        Map<String, String> items,
-        String currentItem = "",
-      }) async {
+    BuildContext context, {
+    String title = "",
+    Map<String, String> items,
+    String currentItem = "",
+  }) async {
     assert(items != null);
 
     return await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => AdvChooserPage(
-              title: title,
-              items: items,
-              currentItem: currentItem,
-            )));
+                  title: title,
+                  items: items,
+                  currentItem: currentItem,
+                )));
   }
 }
 
@@ -166,11 +165,11 @@ class _AdvChooserState extends State<AdvChooser> {
 
     _ctrl = widget.controller == null
         ? AdvChooserController(
-      text: widget.text ?? "",
-      items: widget.items,
-      error: widget.decoration?.errorText,
-      enabled: widget.enabled ?? true,
-    )
+            text: widget.text ?? "",
+            items: widget.items,
+            error: widget.decoration?.errorText,
+            enabled: widget.enabled ?? true,
+          )
         : null;
 
     _effectiveController.addListener(_update);
@@ -205,13 +204,15 @@ class _AdvChooserState extends State<AdvChooser> {
     InputDecoration decoration = widget.decoration ?? InputDecoration();
     ThemeData themeData = Theme.of(context);
     double fontSize =
-    (widget.style?.fontSize ?? themeData.textTheme.subhead.fontSize);
+        (widget.style?.fontSize ?? themeData.textTheme.subhead.fontSize);
     double iconSize = fontSize / 14.0 * 30.0;
     double paddingSize = fontSize / 14.0 * 0.0;
     double rightContentPadding =
         iconSize + (paddingSize * 1); //fontSize / 14.0 * 38.0;
 
-    EdgeInsets setPadding = widget.decoration?.contentPadding == null ? null : (widget.decoration?.contentPadding as EdgeInsets);
+    EdgeInsets setPadding = widget.decoration?.contentPadding == null
+        ? null
+        : (widget.decoration?.contentPadding as EdgeInsets);
 
     TextField textField = TextField(
       key: widget.key,
@@ -256,19 +257,29 @@ class _AdvChooserState extends State<AdvChooser> {
       scrollPhysics: widget.scrollPhysics,
     );
 
+    var tp = new TextPainter(
+        text: TextSpan(
+            text: "abc", style: (widget.style ?? themeData.textTheme.subhead)),
+        textDirection: TextDirection.ltr);
+
+    tp.layout();
+
     return Stack(
       children: [
         textField,
         Positioned(
             right: (setPadding.right ?? 0),
             top: 0.0,
-            bottom: 0.0,
             child: IgnorePointer(
               child: Container(
 //            alignment: Alignment.topCenter,
 //            color: Colors.amber,
                   width: iconSize + (paddingSize * 1),
-                  height: iconSize + (paddingSize * 2),
+                  height: tp.height +
+                      (setPadding.top ?? 0) +
+                      12.0 +
+                      (setPadding.bottom ?? 0) +
+                      8.0,
                   padding: EdgeInsets.all(paddingSize).copyWith(right: 0.0),
                   child: Icon(
                     Icons.arrow_drop_down,

@@ -1,3 +1,9 @@
+## [1.0.0+5] - 3 Des 2019.
+
+* Fix groupcheck's items argument from Map<String, Widget> to List<AdvGroupCheckItem>
+* Add prefixCheckbox for both GroupCheck and GroupRadio
+* Takeout GroupRadio's timer after user tapped and move it to pickFromChooser
+
 ## [1.0.0+4] - 2 Des 2019.
 
 * Add clear focus when button is pressed

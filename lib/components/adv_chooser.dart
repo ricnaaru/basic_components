@@ -1,5 +1,7 @@
 library adv_chooser;
 
+import 'dart:async';
+
 import 'package:basic_components/basic_components.dart';
 import 'package:basic_components/components/adv_group_radio.dart';
 import 'package:basic_components/components/adv_list_tile.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 part 'adv_chooser_controller.dart';
+
 part 'adv_chooser_page.dart';
 
 enum IntentType { bottomSheet, page }
@@ -125,7 +128,15 @@ class AdvChooser extends StatefulWidget {
                   child: AdvGroupRadio(
                     controller: controller,
                     callback: (itemSelected) async {
-                      Navigator.of(context).pop(itemSelected);
+                      Navigator.of(context).push(PageRouteBuilder(
+                          opaque: false,
+                          pageBuilder: (BuildContext context, _, __) {
+                            return Container();
+                          }));
+
+                      Timer(Duration(milliseconds: 300), () {
+                        Navigator.of(context).pop(itemSelected);
+                      });
                     },
                   ),
                 ),

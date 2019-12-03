@@ -15,9 +15,10 @@ typedef GroupCheckCallback = void Function(List<String> data);
 class AdvGroupCheck extends StatefulWidget {
   final AdvGroupCheckController controller;
   final GroupCheckCallback callback;
+  final bool prefixCheckbox;
 
   AdvGroupCheck(
-      {String text, Map<String, Widget> items, AdvGroupCheckController controller, this.callback})
+      {String text, List<AdvGroupCheckItem> items, AdvGroupCheckController controller, this.callback, this.prefixCheckbox})
       : assert(controller == null || (text == null && items == null)),
         this.controller = controller ?? new AdvGroupCheckController(items: items ?? []);
 
@@ -45,6 +46,16 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
 
     for (int i = 0; i < widget.controller.items.length; i++) {
       AdvGroupCheckItem item = widget.controller.items[i];
+
+      Widget checkbox = AbsorbPointer(
+          child: AdvCheckbox(
+            onChanged: (value) {},
+            value: item.isChecked,
+            radius: Radius.circular(AdvCheckbox.width / 4),
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            activeColor: BasicComponents.groupCheck.checkColor,
+          ));
+
       children.add(Container(
           child: AdvListTile(
               onTap: () {
@@ -73,14 +84,8 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
               },
               padding: EdgeInsets.all(16.0),
               expanded: item.display,
-              end: AbsorbPointer(
-                  child: AdvCheckbox(
-                onChanged: (value) {},
-                value: item.isChecked,
-                radius: Radius.circular(AdvCheckbox.width / 4),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                activeColor: BasicComponents.groupCheck.checkColor,
-              )))));
+              start: (widget.prefixCheckbox ?? false) ? checkbox : null,
+              end: (widget.prefixCheckbox ?? false) ? null : checkbox)));
     }
 
     return WillPopScope(

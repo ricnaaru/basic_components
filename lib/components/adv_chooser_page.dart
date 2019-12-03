@@ -35,7 +35,15 @@ class _AdvChooserPageState extends State<AdvChooserPage> {
         child: AdvGroupRadio(
           controller: controller,
           callback: (itemSelected) async {
-            Navigator.of(context).pop(itemSelected);
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (BuildContext context, _, __) {
+                  return Container();
+                }));
+
+            Timer(Duration(milliseconds: 300), () {
+              Navigator.of(context).pop(itemSelected);
+            });
           },
         ),
       ),

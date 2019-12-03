@@ -62,18 +62,6 @@ class _AdvGroupRadioState extends State<AdvGroupRadio> {
                         if (this.mounted)
                           setState(() {
                             _text = true;
-
-                            Navigator.of(context).push(PageRouteBuilder(
-                                opaque: false,
-                                pageBuilder: (BuildContext context, _, __) {
-                                  return Container();
-                                }));
-
-                            Timer(Duration(milliseconds: 300), () {
-                              Navigator.pop(context);
-                              if (widget.callback != null)
-                                widget.callback(itemKey);
-                            });
                           });
                       });
                     });

@@ -92,11 +92,11 @@ class AdvChooser extends StatefulWidget {
   _AdvChooserState createState() => _AdvChooserState();
 
   static Future<String> chooseFromBottomSheet(
-    BuildContext context, {
-    String title = "",
-    Map<String, String> items,
-    String currentItem = "",
-  }) async {
+      BuildContext context, {
+        String title = "",
+        Map<String, String> items,
+        String currentItem = "",
+      }) async {
     assert(items != null);
 
     Map<String, Widget> groupRadioItems = items.map((key, value) {
@@ -104,64 +104,81 @@ class AdvChooser extends StatefulWidget {
     });
 
     AdvGroupRadioController controller =
-        AdvGroupRadioController(text: currentItem, items: groupRadioItems);
+    AdvGroupRadioController(text: currentItem, items: groupRadioItems);
 
     return await showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AdvListTile(
-                padding: EdgeInsets.all(16.0),
-                start: Icon(Icons.close),
-                expanded: Text(title,
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700)),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              Container(height: 2.0, color: Theme.of(context).dividerColor),
-              Flexible(
-                child: SingleChildScrollView(
-                  child: AdvGroupRadio(
-                    controller: controller,
-                    callback: (itemSelected) async {
-                      Navigator.of(context).push(PageRouteBuilder(
-                          opaque: false,
-                          pageBuilder: (BuildContext context, _, __) {
-                            return Container();
-                          }));
+          Timer _timer;
 
-                      Timer(Duration(milliseconds: 300), () {
-                        Navigator.of(context).pop(itemSelected);
-                      });
-                    },
+          return WillPopScope(
+            onWillPop: () async {
+              return _timer == null;
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AdvListTile(
+                  padding: EdgeInsets.all(16.0),
+                  start: Icon(Icons.close),
+                  expanded: Text(title,
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.w700)),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                Container(height: 2.0, color: Theme.of(context).dividerColor),
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: AdvGroupRadio(
+                      controller: controller,
+                      callback: (itemSelected) async {
+                        Navigator.of(context).push(PageRouteBuilder(
+                            opaque: false,
+                            pageBuilder: (BuildContext context, _, __) {
+                              return WillPopScope(
+                                  onWillPop: () async {
+                                    return _timer == null;
+                                  },
+                                  child: Container());
+                            }));
+                        ;
+
+                        if (_timer != null) {
+                          _timer.cancel();
+                        }
+                        _timer = Timer(Duration(milliseconds: 300), () {
+                          _timer = null;
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop(itemSelected);
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         });
   }
 
   static Future<String> chooseFromPage(
-    BuildContext context, {
-    String title = "",
-    Map<String, String> items,
-    String currentItem = "",
-  }) async {
+      BuildContext context, {
+        String title = "",
+        Map<String, String> items,
+        String currentItem = "",
+      }) async {
     assert(items != null);
 
     return await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => AdvChooserPage(
-                  title: title,
-                  items: items,
-                  currentItem: currentItem,
-                )));
+              title: title,
+              items: items,
+              currentItem: currentItem,
+            )));
   }
 }
 
@@ -176,11 +193,11 @@ class _AdvChooserState extends State<AdvChooser> {
 
     _ctrl = widget.controller == null
         ? AdvChooserController(
-            text: widget.text ?? "",
-            items: widget.items,
-            error: widget.decoration?.errorText,
-            enabled: widget.enabled ?? true,
-          )
+      text: widget.text ?? "",
+      items: widget.items,
+      error: widget.decoration?.errorText,
+      enabled: widget.enabled ?? true,
+    )
         : null;
 
     _effectiveController.addListener(_update);
@@ -215,7 +232,7 @@ class _AdvChooserState extends State<AdvChooser> {
     InputDecoration decoration = widget.decoration ?? InputDecoration();
     ThemeData themeData = Theme.of(context);
     double fontSize =
-        (widget.style?.fontSize ?? themeData.textTheme.subhead.fontSize);
+    (widget.style?.fontSize ?? themeData.textTheme.subhead.fontSize);
     double iconSize = fontSize / 14.0 * 30.0;
     double paddingSize = fontSize / 14.0 * 0.0;
     double rightContentPadding =

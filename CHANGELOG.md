@@ -1,3 +1,7 @@
+## [1.0.0+6] - 3 Des 2019.
+
+* Fix groupcheck and groupRadio not calling callback
+
 ## [1.0.0+5] - 3 Des 2019.
 
 * Fix groupcheck's items argument from Map<String, Widget> to List<AdvGroupCheckItem>

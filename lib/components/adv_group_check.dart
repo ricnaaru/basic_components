@@ -18,17 +18,20 @@ class AdvGroupCheck extends StatefulWidget {
   final bool prefixCheckbox;
 
   AdvGroupCheck(
-      {String text, List<AdvGroupCheckItem> items, AdvGroupCheckController controller, this.callback, this.prefixCheckbox})
+      {String text,
+      List<AdvGroupCheckItem> items,
+      AdvGroupCheckController controller,
+      this.callback,
+      this.prefixCheckbox})
       : assert(controller == null || (text == null && items == null)),
-        this.controller = controller ?? new AdvGroupCheckController(items: items ?? []);
+        this.controller =
+            controller ?? new AdvGroupCheckController(items: items ?? []);
 
   @override
   State<StatefulWidget> createState() => _AdvGroupCheckState();
 }
 
 class _AdvGroupCheckState extends State<AdvGroupCheck> {
-  Timer _timer;
-
   @override
   void initState() {
     widget.controller.addListener(() {
@@ -49,20 +52,21 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
 
       Widget checkbox = AbsorbPointer(
           child: AdvCheckbox(
-            onChanged: (value) {},
-            value: item.isChecked,
-            radius: Radius.circular(AdvCheckbox.width / 4),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            activeColor: BasicComponents.groupCheck.checkColor,
-          ));
+        onChanged: (value) {},
+        value: item.isChecked,
+        radius: Radius.circular(AdvCheckbox.width / 4),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        activeColor: BasicComponents.groupCheck.checkColor,
+      ));
 
       children.add(Container(
           child: AdvListTile(
               onTap: () {
+                widget.controller.check = i;
+                if (this.mounted)
 //                if (this.mounted)
 //                  setState(() {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  widget.controller.check = i;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
 //                  if (this.mounted)
 //                    setState(() {
 //                          Navigator.of(context).push(PageRouteBuilder(
@@ -70,17 +74,15 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
 //                              pageBuilder: (BuildContext context, _, __) {
 //                                return Container();
 //                              }));
-                  if (_timer != null) {
-                    _timer.cancel();
-                  }
-                  _timer = Timer(Duration(milliseconds: 3000), () {
-                    _timer = null;
 //                            Navigator.pop(context);
-//                            if (widget.callback != null) widget.callback(itemKey);
-                  });
+                    if (widget.callback != null)
+                      widget.callback(widget.controller.items
+                          .where((item) => item.isChecked)
+                          .map((item) => item.value)
+                          .toList());
 //                        });
 //                    });
-                });
+                  });
               },
               padding: EdgeInsets.all(16.0),
               expanded: item.display,
@@ -88,21 +90,16 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
               end: (widget.prefixCheckbox ?? false) ? null : checkbox)));
     }
 
-    return WillPopScope(
-      onWillPop: () async {
-        return _timer == null;
-      },
-      child: Container(
-        child: AdvColumn(
-            divider: Container(
-              height: 1.0,
-              margin: EdgeInsets.symmetric(horizontal: 16.0),
-              color: Theme.of(context).dividerColor,
-            ),
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: children),
-      ),
+    return Container(
+      child: AdvColumn(
+          divider: Container(
+            height: 1.0,
+            margin: EdgeInsets.symmetric(horizontal: 16.0),
+            color: Theme.of(context).dividerColor,
+          ),
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: children),
     );
   }
 

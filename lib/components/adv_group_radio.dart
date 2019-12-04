@@ -65,6 +65,10 @@ class _AdvGroupRadioState extends State<AdvGroupRadio> {
                           });
                       });
                     });
+
+
+                  if (widget.callback != null)
+                    widget.callback(itemKey);
                 },
                 padding: EdgeInsets.all(16.0),
                 expanded: stringChildren[itemKey],

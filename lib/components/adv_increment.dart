@@ -327,7 +327,7 @@ class _AdvIncrementState extends State<AdvIncrement> {
                             _effectiveController.error = null;
                             if (amount != null &&
                                 minAmount != null &&
-                                minAmount <= amount) return;
+                                minAmount >= amount) return;
                             _effectiveController.amount =
                                 (amount ?? 0) - 1;
                             if (widget.onChanged != null)

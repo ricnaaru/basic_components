@@ -56,8 +56,14 @@ class AdvCheckbox extends StatefulWidget {
     this.activeColor,
     this.materialTapTargetSize,
     this.radius,
+    double size,
+    double edgeRadius,
+    double strokeWidth,
   })  : assert(tristate != null),
         assert(tristate || value != null),
+        this.size = size ?? 16.0,
+        this.edgeRadius = edgeRadius ?? (size ?? 16.0) + 2.0,
+        this.strokeWidth = strokeWidth ?? 2.0,
         super(key: key);
 
   /// Whether this checkbox is rounded or roundedRectangle or just rectangle.
@@ -126,7 +132,9 @@ class AdvCheckbox extends StatefulWidget {
   final MaterialTapTargetSize materialTapTargetSize;
 
   /// The width of a checkbox widget.
-  static const double width = 16.0;
+  final double size;
+  final double edgeRadius;
+  final double strokeWidth;
 
   @override
   _AdvCheckboxState createState() => _AdvCheckboxState();
@@ -160,6 +168,8 @@ class _AdvCheckboxState extends State<AdvCheckbox>
       additionalConstraints: additionalConstraints,
       vsync: this,
       radius: widget.radius,
+      edgeRadius:widget.edgeRadius,
+      strokeWidth:widget.strokeWidth,
     );
   }
 }
@@ -175,6 +185,8 @@ class _CheckboxRenderObjectWidget extends LeafRenderObjectWidget {
     @required this.vsync,
     @required this.additionalConstraints,
     @required this.radius,
+    @required this.edgeRadius,
+    @required this.strokeWidth,
   })  : assert(tristate != null),
         assert(tristate || value != null),
         assert(activeColor != null),
@@ -190,6 +202,8 @@ class _CheckboxRenderObjectWidget extends LeafRenderObjectWidget {
   final TickerProvider vsync;
   final BoxConstraints additionalConstraints;
   final Radius radius;
+  final double edgeRadius;
+  final double strokeWidth;
 
   @override
   _RenderCheckbox createRenderObject(BuildContext context) => _RenderCheckbox(
@@ -201,6 +215,8 @@ class _CheckboxRenderObjectWidget extends LeafRenderObjectWidget {
     vsync: vsync,
     additionalConstraints: additionalConstraints,
     radius: radius,
+    edgeRadius: edgeRadius,
+    strokeWidth: strokeWidth,
   );
 
   @override
@@ -216,9 +232,6 @@ class _CheckboxRenderObjectWidget extends LeafRenderObjectWidget {
   }
 }
 
-const double _kEdgeSize = AdvCheckbox.width + 2.0;
-const double _kStrokeWidth = 2.0;
-
 class _RenderCheckbox extends RenderToggleable {
   _RenderCheckbox({
     bool value,
@@ -229,8 +242,12 @@ class _RenderCheckbox extends RenderToggleable {
     ValueChanged<bool> onChanged,
     @required TickerProvider vsync,
     Radius radius = const Radius.circular(0.0),
+    double edgeRadius,
+    double strokeWidth,
   })  : _oldValue = value,
         _radius = radius,
+        _strokeWidth = strokeWidth,
+        _edgeRadius = edgeRadius,
         super(
         value: value,
         tristate: tristate,
@@ -243,6 +260,8 @@ class _RenderCheckbox extends RenderToggleable {
 
   bool _oldValue;
   Radius _radius;
+  double _strokeWidth;
+  double _edgeRadius;
 
   @override
   set value(bool newValue) {
@@ -263,7 +282,7 @@ class _RenderCheckbox extends RenderToggleable {
   // At t == 1.0, .. is _kEdgeSize
   RRect _outerRectAt(Offset origin, double t) {
     final double inset = 1.0 - (t - 0.5).abs() * 2.0;
-    final double size = _kEdgeSize - inset * _kStrokeWidth;
+    final double size = _edgeRadius - inset * _strokeWidth;
     final Rect rect =
     Rect.fromLTWH(origin.dx + inset, origin.dy + inset, size, size);
     return RRect.fromRectAndRadius(rect, _radius);
@@ -285,14 +304,14 @@ class _RenderCheckbox extends RenderToggleable {
     paint
       ..color = const Color(0xFFFFFFFF)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = _kStrokeWidth;
+      ..strokeWidth = _strokeWidth;
   }
 
   void _drawBorder(Canvas canvas, RRect outer, double t, Paint paint) {
     assert(t >= 0.0 && t <= 0.5);
     final double size = outer.width;
     // As t goes from 0.0 to 1.0, gradually fill the outer RRect.
-    RRect inner = outer.deflate(math.min(size / 1.0, _kStrokeWidth + size * t));
+    RRect inner = outer.deflate(math.min(size / 1.0, _strokeWidth + size * t));
 //    inner = RRect.fromRectAndRadius(inner.outerRect, Radius.circular(outer.width));
     canvas.drawDRRect(outer, inner, paint);
   }
@@ -302,9 +321,9 @@ class _RenderCheckbox extends RenderToggleable {
     // As t goes from 0.0 to 1.0, animate the two check mark strokes from the
     // short side to the long side.
     final Path path = Path();
-    const Offset start = Offset(_kEdgeSize * 0.25, _kEdgeSize * 0.55);
-    const Offset mid = Offset(_kEdgeSize * 0.4, _kEdgeSize * 0.7);
-    const Offset end = Offset(_kEdgeSize * 0.75, _kEdgeSize * 0.35);
+    Offset start = Offset(_edgeRadius * 0.25, _edgeRadius * 0.55);
+    Offset mid = Offset(_edgeRadius * 0.4, _edgeRadius * 0.7);
+    Offset end = Offset(_edgeRadius * 0.75, _edgeRadius * 0.35);
     if (t < 0.5) {
       final double strokeT = t * 2.0;
       final Offset drawMid = Offset.lerp(start, mid, strokeT);
@@ -324,9 +343,9 @@ class _RenderCheckbox extends RenderToggleable {
     assert(t >= 0.0 && t <= 1.0);
     // As t goes from 0.0 to 1.0, animate the horizontal line from the
     // mid point outwards.
-    const Offset start = Offset(_kEdgeSize * 0.2, _kEdgeSize * 0.5);
-    const Offset mid = Offset(_kEdgeSize * 0.5, _kEdgeSize * 0.5);
-    const Offset end = Offset(_kEdgeSize * 0.8, _kEdgeSize * 0.5);
+    Offset start = Offset(_edgeRadius * 0.2, _edgeRadius * 0.5);
+    Offset mid = Offset(_edgeRadius * 0.5, _edgeRadius * 0.5);
+    Offset end = Offset(_edgeRadius * 0.8, _edgeRadius * 0.5);
     final Offset drawStart = Offset.lerp(start, mid, 1.0 - t);
     final Offset drawEnd = Offset.lerp(mid, end, t);
     canvas.drawLine(origin + drawStart, origin + drawEnd, paint);
@@ -338,7 +357,7 @@ class _RenderCheckbox extends RenderToggleable {
     paintRadialReaction(canvas, offset, size.center(Offset.zero));
 
     final Offset origin =
-        offset + (size / 2.0 - const Size.square(_kEdgeSize) / 2.0);
+        offset + (size / 2.0 - Size.square(_edgeRadius) / 2.0);
     final AnimationStatus status = position.status;
     final double tNormalized =
     status == AnimationStatus.forward || status == AnimationStatus.completed

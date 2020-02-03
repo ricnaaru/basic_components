@@ -1,8 +1,5 @@
 library group_radio;
 
-import 'dart:async';
-
-import 'package:basic_components/basic_components.dart';
 import 'package:basic_components/components/adv_check_box.dart';
 import 'package:basic_components/components/adv_column.dart';
 import 'package:basic_components/components/adv_list_tile.dart';
@@ -69,9 +66,7 @@ class _AdvGroupRadioState extends State<AdvGroupRadio> {
                       });
                     });
 
-
-                  if (widget.callback != null)
-                    widget.callback(itemKey);
+                  if (widget.callback != null) widget.callback(itemKey);
                 },
                 padding: EdgeInsets.all(16.0),
                 expanded: stringChildren[itemKey],
@@ -80,7 +75,7 @@ class _AdvGroupRadioState extends State<AdvGroupRadio> {
                         child: AdvCheckbox(
                         onChanged: (value) {},
                         value: _text,
-                        radius: Radius.circular(AdvCheckbox.width),
+                        radius: Radius.circular(16.0),
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         activeColor: componentTheme.groupRadio.checkColor,
                       ))

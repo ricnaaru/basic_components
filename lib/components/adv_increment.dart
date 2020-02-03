@@ -295,10 +295,9 @@ class _AdvIncrementState extends State<AdvIncrement> {
           (widget.subtractIconMargin?.horizontal ?? 0) +
           (widget.addIconMargin?.horizontal ?? 0) +
           (widget.subtractIconPadding?.horizontal ?? 0) +
-          (widget.addIconPadding?.horizontal ?? 0) -
-          (fontSize /
-              60.0 *
-              8.0) /*adjustment di fontsize 60, ukuran adjustment 8.0*/;
+          (widget.addIconPadding?.horizontal ?? 0) +
+          (definedPadding.horizontal ??
+              0) /*adjustment di fontsize 60, ukuran adjustment 8.0*/;
     }
 
     return Container(
@@ -311,81 +310,152 @@ class _AdvIncrementState extends State<AdvIncrement> {
             left: widget.subtractIconMargin.left,
             top: widget.subtractIconMargin.top,
             bottom: widget.subtractIconMargin.bottom,
-            child: Material(
-                clipBehavior: Clip.antiAlias,
-                color: widget.subtractButtonColor,
-                shape: widget.subtractButtonShapeBorder ?? CircleBorder(),
-                type: widget.addButtonColor == null
-                    ? MaterialType.transparency
-                    : MaterialType.canvas,
-                child: InkWell(
-                    onTap: _effectiveController.enabled
-                        ? () {
-                            int amount = _effectiveController.amount ?? 0;
-                            int minAmount = _effectiveController.minAmount;
-
-                            _effectiveController.error = null;
-                            if (amount != null &&
-                                minAmount != null &&
-                                minAmount >= amount) return;
-                            _effectiveController.amount =
-                                (amount ?? 0) - 1;
-                            if (widget.onChanged != null)
-                              widget.onChanged(_effectiveController.amount);
-                          }
-                        : null,
-                    child: Container(
-                        width: (fontSize * 1.5) +
-                            widget.subtractIconPadding.horizontal,
-                        height: (fontSize * 1.5) +
-                            widget.subtractIconPadding.vertical,
-                        padding: widget.subtractIconPadding,
-                        child: Icon(
-                          widget.subtractIcon?.icon ?? Icons.remove,
-                          size: (fontSize * 1.5),
-                          color: widget.subtractIcon?.color,
-                        )))),
+            child: IncrementButton(
+              controller: _effectiveController,
+              color: widget.subtractButtonColor,
+              shapeBorder: widget.subtractButtonShapeBorder,
+              onChanged: widget.onChanged,
+              fontSize: fontSize,
+              icon: widget.subtractIcon,
+              iconPadding: widget.subtractIconPadding,
+              incrementType: IncrementType.subtract,
+            ),
           ),
           Positioned(
             right: widget.addIconMargin.right,
             top: widget.addIconMargin.top,
             bottom: widget.addIconMargin.bottom,
-            child: Material(
-                clipBehavior: Clip.antiAlias,
-                color: widget.addButtonColor,
-                shape: widget.addButtonShapeBorder ?? CircleBorder(),
-                type: widget.addButtonColor == null
-                    ? MaterialType.transparency
-                    : MaterialType.canvas,
-                child: InkWell(
-                    onTap: _effectiveController.enabled
-                        ? () {
-                            int amount = _effectiveController.amount ?? 0;
-                            int maxAmount = _effectiveController.maxAmount;
-
-                            _effectiveController.error = null;
-                            if (amount != null &&
-                                maxAmount != null &&
-                                maxAmount <= amount) return;
-                            _effectiveController.amount = (amount ?? 0) + 1;
-                            if (widget.onChanged != null)
-                              widget.onChanged(_effectiveController.amount);
-                          }
-                        : null,
-                    child: Container(
-                        width:
-                            (fontSize * 1.5) + widget.addIconPadding.horizontal,
-                        height:
-                            (fontSize * 1.5) + widget.addIconPadding.vertical,
-                        padding: widget.addIconPadding,
-                        child: Icon(
-                          widget.addIcon?.icon ?? Icons.add,
-                          size: (fontSize * 1.5),
-                          color: widget.addIcon?.color,
-                        )))),
+            child: IncrementButton(
+              controller: _effectiveController,
+              color: widget.addButtonColor,
+              shapeBorder: widget.addButtonShapeBorder,
+              onChanged: widget.onChanged,
+              fontSize: fontSize,
+              icon: widget.addIcon,
+              iconPadding: widget.addIconPadding,
+              incrementType: IncrementType.add,
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+enum IncrementType { add, subtract }
+
+class IncrementButton extends StatefulWidget {
+  final AdvIncrementController controller;
+  final Color color;
+  final ShapeBorder shapeBorder;
+  final ValueChanged<num> onChanged;
+  final double fontSize;
+  final Icon icon;
+  final EdgeInsets iconPadding;
+  final IncrementType incrementType;
+
+  IncrementButton({
+    this.controller,
+    this.color,
+    this.shapeBorder,
+    this.onChanged,
+    this.fontSize,
+    this.icon,
+    this.iconPadding,
+    this.incrementType,
+  });
+
+  @override
+  _IncrementButtonState createState() => _IncrementButtonState();
+}
+
+class _IncrementButtonState extends State<IncrementButton> {
+  @override
+  Widget build(BuildContext context) {
+    bool disabled = (widget.controller.amount == widget.controller.maxAmount &&
+            widget.incrementType == IncrementType.add) ||
+        (widget.controller.amount == widget.controller.minAmount &&
+            widget.incrementType == IncrementType.subtract);
+
+    return Stack(
+      children: [
+        Center(
+          child: Material(
+            clipBehavior: Clip.antiAlias,
+            color: widget.color,
+            shape: widget.shapeBorder ?? CircleBorder(),
+            type: widget.color == null
+                ? MaterialType.transparency
+                : MaterialType.canvas,
+            child: InkWell(
+              onTap: widget.controller.enabled
+                  ? () {
+                      if (widget.incrementType == IncrementType.add) {
+                        int amount = widget.controller.amount ?? 0;
+                        int maxAmount = widget.controller.maxAmount;
+
+                        widget.controller.error = null;
+                        if (amount != null &&
+                            maxAmount != null &&
+                            maxAmount <= amount) return;
+                        widget.controller.amount = (amount ?? 0) + 1;
+                        if (widget.onChanged != null)
+                          widget.onChanged(widget.controller.amount);
+                      } else {
+                        int amount = widget.controller.amount ?? 0;
+                        int minAmount = widget.controller.minAmount;
+
+                        widget.controller.error = null;
+                        if (amount != null &&
+                            minAmount != null &&
+                            minAmount >= amount) return;
+                        widget.controller.amount = (amount ?? 0) - 1;
+                        if (widget.onChanged != null)
+                          widget.onChanged(widget.controller.amount);
+                      }
+
+                      if (widget.controller.amount ==
+                              widget.controller.maxAmount ||
+                          widget.controller.amount ==
+                              widget.controller.minAmount) {
+                        if (this.mounted) setState(() {});
+                      }
+                    }
+                  : null,
+              child: Container(
+                width: (widget.fontSize * 1.5) + widget.iconPadding.horizontal,
+                height: (widget.fontSize * 1.5) + widget.iconPadding.vertical,
+                padding: widget.iconPadding,
+                child: Icon(
+                  widget.icon?.icon ??
+                      (widget.incrementType == IncrementType.add
+                          ? Icons.add
+                          : Icons.remove),
+                  size: (widget.fontSize * 1.5),
+                  color: widget.icon?.color,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Center(
+          child: disabled
+              ? Material(
+                  clipBehavior: Clip.antiAlias,
+                  shape: widget.shapeBorder ?? CircleBorder(),
+                  type: MaterialType.transparency,
+                  child: Container(
+                    width:
+                        (widget.fontSize * 1.5) + widget.iconPadding.horizontal,
+                    height:
+                        (widget.fontSize * 1.5) + widget.iconPadding.vertical,
+                    padding: widget.iconPadding,
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                )
+              : Container(),
+        ),
+      ],
     );
   }
 }

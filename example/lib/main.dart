@@ -51,7 +51,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   AdvTextFieldController controller = AdvTextFieldController();
   AdvIncrementController incrementController =
-      AdvIncrementController(amount: 10);
+      AdvIncrementController(amount: 10, minAmount: 0, maxAmount: 15);
   AdvDatePickerController dateController = AdvDatePickerController(
     minDate: DateTime.now(),
     maxDate: DateTime.now().add(Duration(days: 30)),
@@ -91,129 +91,129 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             divider: ColumnDivider(16.0),
             children: [
-              AdvTextField(
-                controller: controller
-                  ..prefixIcon = Material(
-                      child: InkWell(
-                    child: Icon(Icons.add),
-                    onTap: () {
-                      Toast.showToast(context, "I'm Tapped!");
-                    },
-                  )),
-                minLines: 3,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  hintText: "Text \n lalala",
-                  prefix: Text("Prefix"),
-                  isDense: true,
-                  helperText: "This is Helper Text",
-                ),
-              ),
-              Text(
-                "Prefix",
-                style: p16.accent.copyWith(color: c),
-              ),
-              TextField(
-                minLines: 3,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  hintText: "Text \n lalala",
-                  labelText: "Latex",
-                  prefix: Text("Prefix"),
-                  prefixIcon: Icon(Icons.add),
-                  helperText: "This is Helper Text",
-                  contentPadding: EdgeInsets.all(8.0),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green)),
-                  filled: true,
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 5.0, color: Colors.red)),
-                  errorBorder: InputBorder.none,
-                  focusedErrorBorder: InputBorder.none,
-                  fillColor: Colors.white,
-                  focusColor: Colors.green,
-                  hoverColor: Colors.orange,
-                ),
-//                scrollPadding: EdgeInsets.all(16.0),
-              ),
-              AdvRow(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                divider: RowDivider(16.0),
-                children: [
-                  FlatButton(
-                    child: Text("Hide Password!"),
-                    onPressed: () {
-                      controller.obscureText = true;
-                    },
-                  ),
-                  FlatButton(
-                    child: Text("Unhide Password!"),
-                    onPressed: () {
-                      controller.obscureText = false;
-                    },
-                  ),
-                ],
-              ),
-              AdvRow(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                divider: RowDivider(16.0),
-                children: [
-                  FlatButton(
-                    child: Text("Set Error!"),
-                    onPressed: () {
-                      controller.error = "Error!";
-                    },
-                  ),
-                  FlatButton(
-                    child: Text("Unset Error!"),
-                    onPressed: () {
-                      controller.error = null;
-                    },
-                  ),
-                ],
-              ),
-              AdvRow(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                divider: RowDivider(16.0),
-                children: [
-                  FlatButton(
-                    child: Text("Disable!"),
-                    onPressed: () {
-                      controller.enabled = false;
-                    },
-                  ),
-                  FlatButton(
-                    child: Text("Enable!"),
-                    onPressed: () {
-                      controller.enabled = true;
-                    },
-                  ),
-                ],
-              ),
-              AdvRow(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                divider: RowDivider(16.0),
-                children: [
-                  FlatButton(
-                    child: Text("Set Text!"),
-                    onPressed: () {
-                      controller.text = "Date Time = ${DateTime.now()}";
-                    },
-                  ),
-                ],
-              ),
-              Container(
-                color: Colors.white,
-                child: AdvChooser(
-                    style: TextStyle(fontSize: 32.0),
-                    textAlign: TextAlign.center,
-                    items: {
-                      "test1": "Satu",
-                      "test2": "Dua",
-                      "test3": "Tiga",
-                      "test4": "Empat",
-                    }),
-              ),
+//              AdvTextField(
+//                controller: controller
+//                  ..prefixIcon = Material(
+//                      child: InkWell(
+//                    child: Icon(Icons.add),
+//                    onTap: () {
+//                      Toast.showToast(context, "I'm Tapped!");
+//                    },
+//                  )),
+//                minLines: 3,
+//                maxLines: 4,
+//                decoration: InputDecoration(
+//                  hintText: "Text \n lalala",
+//                  prefix: Text("Prefix"),
+//                  isDense: true,
+//                  helperText: "This is Helper Text",
+//                ),
+//              ),
+//              Text(
+//                "Prefix",
+//                style: p16.accent.copyWith(color: c),
+//              ),
+//              TextField(
+//                minLines: 3,
+//                maxLines: 4,
+//                decoration: InputDecoration(
+//                  hintText: "Text \n lalala",
+//                  labelText: "Latex",
+//                  prefix: Text("Prefix"),
+//                  prefixIcon: Icon(Icons.add),
+//                  helperText: "This is Helper Text",
+//                  contentPadding: EdgeInsets.all(8.0),
+//                  focusedBorder: OutlineInputBorder(
+//                      borderSide: BorderSide(color: Colors.green)),
+//                  filled: true,
+//                  enabledBorder: OutlineInputBorder(
+//                      borderSide: BorderSide(width: 5.0, color: Colors.red)),
+//                  errorBorder: InputBorder.none,
+//                  focusedErrorBorder: InputBorder.none,
+//                  fillColor: Colors.white,
+//                  focusColor: Colors.green,
+//                  hoverColor: Colors.orange,
+//                ),
+////                scrollPadding: EdgeInsets.all(16.0),
+//              ),
+//              AdvRow(
+//                padding: EdgeInsets.symmetric(horizontal: 16.0),
+//                divider: RowDivider(16.0),
+//                children: [
+//                  FlatButton(
+//                    child: Text("Hide Password!"),
+//                    onPressed: () {
+//                      controller.obscureText = true;
+//                    },
+//                  ),
+//                  FlatButton(
+//                    child: Text("Unhide Password!"),
+//                    onPressed: () {
+//                      controller.obscureText = false;
+//                    },
+//                  ),
+//                ],
+//              ),
+//              AdvRow(
+//                padding: EdgeInsets.symmetric(horizontal: 16.0),
+//                divider: RowDivider(16.0),
+//                children: [
+//                  FlatButton(
+//                    child: Text("Set Error!"),
+//                    onPressed: () {
+//                      controller.error = "Error!";
+//                    },
+//                  ),
+//                  FlatButton(
+//                    child: Text("Unset Error!"),
+//                    onPressed: () {
+//                      controller.error = null;
+//                    },
+//                  ),
+//                ],
+//              ),
+//              AdvRow(
+//                padding: EdgeInsets.symmetric(horizontal: 16.0),
+//                divider: RowDivider(16.0),
+//                children: [
+//                  FlatButton(
+//                    child: Text("Disable!"),
+//                    onPressed: () {
+//                      controller.enabled = false;
+//                    },
+//                  ),
+//                  FlatButton(
+//                    child: Text("Enable!"),
+//                    onPressed: () {
+//                      controller.enabled = true;
+//                    },
+//                  ),
+//                ],
+//              ),
+//              AdvRow(
+//                padding: EdgeInsets.symmetric(horizontal: 16.0),
+//                divider: RowDivider(16.0),
+//                children: [
+//                  FlatButton(
+//                    child: Text("Set Text!"),
+//                    onPressed: () {
+//                      controller.text = "Date Time = ${DateTime.now()}";
+//                    },
+//                  ),
+//                ],
+//              ),
+//              Container(
+//                color: Colors.white,
+//                child: AdvChooser(
+//                    style: TextStyle(fontSize: 32.0),
+//                    textAlign: TextAlign.center,
+//                    items: {
+//                      "test1": "Satu",
+//                      "test2": "Dua",
+//                      "test3": "Tiga",
+//                      "test4": "Empat",
+//                    }),
+//              ),
               AdvRow(divider: RowDivider(16.0), children: [
                 Container(
                   color: Colors.white,

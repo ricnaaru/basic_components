@@ -6,7 +6,7 @@ class MonthCalendar extends StatefulWidget {
   final GlobalKey<YearCalendarState> yearKey;
   final AnimationController dayMonthAnim;
   final AnimationController monthYearAnim;
-  final CalendarStyle calendarStyle;
+  final DatePickerTheme datePickerTheme;
   final PickType pickType;
   final SelectionType selectionType;
   final List<MarkedDate> markedDates;
@@ -24,7 +24,7 @@ class MonthCalendar extends StatefulWidget {
     this.yearKey,
     this.dayMonthAnim,
     this.monthYearAnim,
-    this.calendarStyle,
+    this.datePickerTheme,
     this.pickType,
     this.selectionType,
     this.markedDates,
@@ -142,7 +142,7 @@ class MonthCalendarState extends State<MonthCalendar> with TickerProviderStateMi
     _pageCtrl = PageController(
       initialPage: 1,
       keepPage: true,
-      viewportFraction: widget.calendarStyle.viewportFraction,
+      viewportFraction: widget.datePickerTheme.viewportFraction,
     );
 
     /// set _pageDates for the first time
@@ -186,10 +186,10 @@ class MonthCalendarState extends State<MonthCalendar> with TickerProviderStateMi
           final Rect destRect = rectTween.evaluate(opacityCtrl);
 
           /// minus padding for each horizontal and vertical axis
-          final Size destSize = Size(destRect.size.width - (widget.calendarStyle.dayPadding * 2),
-              destRect.size.height - (widget.calendarStyle.dayPadding * 2));
-          final double top = destRect.top + widget.calendarStyle.dayPadding;
-          final double left = destRect.left + widget.calendarStyle.dayPadding;
+          final Size destSize = Size(destRect.size.width - (widget.datePickerTheme.dayPadding * 2),
+              destRect.size.height - (widget.datePickerTheme.dayPadding * 2));
+          final double top = destRect.top + widget.datePickerTheme.dayPadding;
+          final double left = destRect.left + widget.datePickerTheme.dayPadding;
 
           double xFactor = destSize.width / rectTween.end.width;
           double yFactor = destSize.height / rectTween.end.height;
@@ -227,19 +227,19 @@ class MonthCalendarState extends State<MonthCalendar> with TickerProviderStateMi
             IconButton(
               onPressed: () => _setPage(page: 0),
               icon: Icon(
-                widget.calendarStyle.iconPrevious,
-                color: widget.calendarStyle.iconColor,
+                widget.datePickerTheme.iconPrevious,
+                color: widget.datePickerTheme.iconColor,
               ),
             ),
             Builder(builder: (BuildContext childContext) {
               return Expanded(
                 child: InkWell(
                   child: Container(
-                    margin: widget.calendarStyle.headerMargin,
+                    margin: widget.datePickerTheme.headerMargin,
                     child: Text(
                       '${this._pageDates[1].year}',
                       textAlign: TextAlign.center,
-                      style: widget.calendarStyle.defaultHeaderTextStyle,
+                      style: widget.datePickerTheme.headerTextStyle,
                     ),
                   ),
                   onTap: () => _handleMonthTitleTapped(parentContext),
@@ -249,8 +249,8 @@ class MonthCalendarState extends State<MonthCalendar> with TickerProviderStateMi
             IconButton(
               onPressed: () => _setPage(page: 2),
               icon: Icon(
-                widget.calendarStyle.iconNext,
-                color: widget.calendarStyle.iconColor,
+                widget.datePickerTheme.iconNext,
+                color: widget.datePickerTheme.iconColor,
               ),
             ),
           ],
@@ -277,7 +277,7 @@ class MonthCalendarState extends State<MonthCalendar> with TickerProviderStateMi
     return GridView.count(
       shrinkWrap: true,
       crossAxisCount: widget.isLandscape ? 6 : 4,
-      childAspectRatio: widget.calendarStyle.childAspectRatio,
+      childAspectRatio: widget.datePickerTheme.childAspectRatio,
       padding: EdgeInsets.zero,
       children: List.generate(12, (index) {
         DateTime currentDate = DateTime(year, index + 1, 1);
@@ -327,22 +327,22 @@ class MonthCalendarState extends State<MonthCalendar> with TickerProviderStateMi
         Color borderColor;
 
         Color boxColor;
-        if (isStartEndDay && widget.calendarStyle.selectedDayButtonColor != null) {
-          textStyle = widget.calendarStyle.defaultSelectedDayTextStyle;
-          boxColor = widget.calendarStyle.selectedDayButtonColor;
-          borderColor = widget.calendarStyle.thisMonthDayBorderColor;
+        if (isStartEndDay && widget.datePickerTheme.selectedColor != null) {
+          textStyle = widget.datePickerTheme.selectedDayTextStyle;
+          boxColor = widget.datePickerTheme.selectedColor;
+          borderColor = widget.datePickerTheme.thisMonthDayBorderColor;
         } else if (isSelectedDay) {
-          textStyle = widget.calendarStyle.defaultSelectedDayTextStyle;
-          boxColor = widget.calendarStyle.selectedDayButtonColor.withAlpha(150);
-          borderColor = widget.calendarStyle.thisMonthDayBorderColor;
+          textStyle = widget.datePickerTheme.selectedDayTextStyle;
+          boxColor = widget.datePickerTheme.selectedColor.withAlpha(150);
+          borderColor = widget.datePickerTheme.thisMonthDayBorderColor;
         } else if (isToday) {
-          textStyle = widget.calendarStyle.defaultTodayTextStyle;
-          boxColor = widget.calendarStyle.todayButtonColor;
-          borderColor = widget.calendarStyle.todayBorderColor;
+          textStyle = widget.datePickerTheme.todayTextStyle;
+          boxColor = widget.datePickerTheme.todayColor;
+          borderColor = widget.datePickerTheme.todayColor;
         } else {
-          textStyle = widget.calendarStyle.defaultDaysTextStyle;
-          boxColor = widget.calendarStyle.dayButtonColor;
-          borderColor = widget.calendarStyle.thisMonthDayBorderColor;
+          textStyle = widget.datePickerTheme.weekdayTextStyle;
+          boxColor = widget.datePickerTheme.dayButtonColor;
+          borderColor = widget.datePickerTheme.thisMonthDayBorderColor;
         }
 
         int currentDateLong =
@@ -370,14 +370,14 @@ class MonthCalendarState extends State<MonthCalendar> with TickerProviderStateMi
             }
 
             return Container(
-              margin: EdgeInsets.all(widget.calendarStyle.dayPadding),
+              margin: EdgeInsets.all(widget.datePickerTheme.dayPadding),
               child: IgnorePointer(
                 ignoring: !availableDate,
                 child: FlatButton(
                   color: availableDate ? boxColor : Color.lerp(lerpColor, boxColor, 0.8),
                   onPressed: () => _handleMonthBoxTapped(context, index + 1, year),
-                  padding: EdgeInsets.all(widget.calendarStyle.dayPadding),
-                  shape: (widget.calendarStyle.daysHaveCircularBorder ?? false)
+                  padding: EdgeInsets.all(widget.datePickerTheme.dayPadding),
+                  shape: (widget.datePickerTheme.daysHaveCircularBorder ?? false)
                       ? CircleBorder(
                     side: BorderSide(color: borderColor),
                   )
@@ -386,7 +386,7 @@ class MonthCalendarState extends State<MonthCalendar> with TickerProviderStateMi
                   ),
                   child: Center(
                     child: Text(
-                      '${BasicComponents.datePicker.monthsArray[currentDate.month - 1]}',
+                      '${widget.datePickerTheme.monthsArray[currentDate.month - 1]}',
                       style: availableDate
                           ? textStyle
                           : textStyle.copyWith(color: Color.lerp(lerpColor, textStyle.color, 0.5)),

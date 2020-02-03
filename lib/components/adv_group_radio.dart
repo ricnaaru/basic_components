@@ -6,6 +6,8 @@ import 'package:basic_components/basic_components.dart';
 import 'package:basic_components/components/adv_check_box.dart';
 import 'package:basic_components/components/adv_column.dart';
 import 'package:basic_components/components/adv_list_tile.dart';
+import 'package:basic_components/components/component_theme.dart';
+import 'package:basic_components/components/component_theme_data.dart';
 import 'package:flutter/material.dart';
 
 part 'adv_group_radio_controller.dart';
@@ -47,6 +49,7 @@ class _AdvGroupRadioState extends State<AdvGroupRadio> {
   Widget build(BuildContext context) {
     Map<String, Widget> stringChildren = widget.controller.items;
     List<Widget> children = [];
+    ComponentThemeData componentTheme = ComponentTheme.of(context);
 
     if (stringChildren != null)
       stringChildren.keys.forEach((itemKey) {
@@ -87,7 +90,7 @@ class _AdvGroupRadioState extends State<AdvGroupRadio> {
                         value: _text,
                         radius: Radius.circular(AdvCheckbox.width),
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        activeColor: BasicComponents.groupRadio.checkColor,
+                        activeColor: componentTheme.groupRadio.checkColor,
                       ))
                     : Container())));
       });

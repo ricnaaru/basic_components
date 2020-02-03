@@ -1,13 +1,13 @@
 library adv_chooser;
 
-import 'package:basic_components/basic_components.dart';
 import 'package:basic_components/components/adv_group_radio.dart';
 import 'package:basic_components/components/adv_list_tile.dart';
+import 'package:basic_components/components/component_theme.dart';
+import 'package:basic_components/components/component_theme_data.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 part 'adv_chooser_controller.dart';
-
 part 'adv_chooser_page.dart';
 
 enum IntentType { bottomSheet, page }
@@ -253,6 +253,8 @@ class _AdvChooserState extends State<AdvChooser> {
       scrollPhysics: widget.scrollPhysics,
     );
 
+    ComponentThemeData componentTheme = ComponentTheme.of(context);
+
     return Stack(
       children: [
         textField,
@@ -270,7 +272,7 @@ class _AdvChooserState extends State<AdvChooser> {
                   child: Icon(
                     Icons.arrow_drop_down,
                     size: iconSize,
-                    color: BasicComponents.chooser.iconColor,
+                    color: componentTheme.chooser.iconColor,
                   )),
             )),
       ],

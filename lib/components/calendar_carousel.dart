@@ -8,63 +8,63 @@ enum PickType {
   year,
 }
 
-class CalendarStyle {
-  final TextStyle defaultHeaderTextStyle =
-      TextStyle(fontSize: 20.0, color: BasicComponents.datePicker.headerColor);
-  final TextStyle defaultDaysTextStyle = TextStyle(color: BasicComponents.datePicker.weekdayColor);
-  final TextStyle defaultTodayTextStyle =
-      TextStyle(color: BasicComponents.datePicker.todayTextColor);
-  final TextStyle defaultSelectedDayTextStyle =
-      TextStyle(color: BasicComponents.datePicker.selectedTextColor);
-  final TextStyle daysLabelTextStyle = TextStyle(color: BasicComponents.datePicker.daysLabelColor);
-  final TextStyle defaultNotesTextStyle =
-      TextStyle(color: BasicComponents.datePicker.markedDaysDaysColor);
-  final TextStyle defaultWeekendTextStyle =
-      TextStyle(color: BasicComponents.datePicker.weekendColor);
-  final Widget defaultMarkedDateWidget = Positioned(
-    child: Container(
-      color: BasicComponents.datePicker.markedDaysDaysColor,
-      height: 4.0,
-      width: 4.0,
-    ),
-    bottom: 4.0,
-    left: 18.0,
-  );
-  final Color todayBorderColor = BasicComponents.datePicker.todayColor;
-  final Color todayButtonColor = BasicComponents.datePicker.todayColor;
-  final Color selectedDayButtonColor = BasicComponents.datePicker.selectedColor;
-  final Color iconColor = BasicComponents.datePicker.iconColor;
-  final IconData iconPrevious = BasicComponents.datePicker.iconPrevious;
-  final IconData iconNext = BasicComponents.datePicker.iconNext;
-
-//  final Color selectedDayBorderColor = BasicComponents.datePickerSelectedColor;
-
-  final List<String> weekDays;
-  final double viewportFraction;
-  final Color prevMonthDayBorderColor;
-  final Color thisMonthDayBorderColor;
-  final Color nextMonthDayBorderColor;
-  final double dayPadding;
-  final Color dayButtonColor;
-  final bool daysHaveCircularBorder;
-  final EdgeInsets headerMargin;
-  final double childAspectRatio;
-  final EdgeInsets weekDayMargin;
-
-  CalendarStyle({
-    this.weekDays = const ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
-    this.viewportFraction = 1.0,
-    this.prevMonthDayBorderColor = Colors.transparent,
-    this.thisMonthDayBorderColor = Colors.transparent,
-    this.nextMonthDayBorderColor = Colors.transparent,
-    this.dayPadding = 2.0,
-    this.dayButtonColor = Colors.transparent,
-    this.daysHaveCircularBorder,
-    this.headerMargin = const EdgeInsets.symmetric(vertical: 16.0),
-    this.childAspectRatio = 1.0,
-    this.weekDayMargin = const EdgeInsets.only(bottom: 4.0),
-  });
-}
+//class CalendarStyle {
+//  final TextStyle defaultHeaderTextStyle =
+//      TextStyle(fontSize: 20.0, color: BasicComponents.datePicker.headerColor);
+//  final TextStyle defaultDaysTextStyle = TextStyle(color: BasicComponents.datePicker.weekdayColor);
+//  final TextStyle defaultTodayTextStyle =
+//      TextStyle(color: BasicComponents.datePicker.todayTextColor);
+//  final TextStyle defaultSelectedDayTextStyle =
+//      TextStyle(color: BasicComponents.datePicker.selectedTextColor);
+//  final TextStyle daysLabelTextStyle = TextStyle(color: BasicComponents.datePicker.daysLabelColor);
+//  final TextStyle defaultNotesTextStyle =
+//      TextStyle(color: BasicComponents.datePicker.markedDaysDaysColor);
+//  final TextStyle defaultWeekendTextStyle =
+//      TextStyle(color: BasicComponents.datePicker.weekendColor);
+//  final Widget defaultMarkedDateWidget = Positioned(
+//    child: Container(
+//      color: BasicComponents.datePicker.markedDaysDaysColor,
+//      height: 4.0,
+//      width: 4.0,
+//    ),
+//    bottom: 4.0,
+//    left: 18.0,
+//  );
+//  final Color todayBorderColor = BasicComponents.datePicker.todayColor;
+//  final Color todayButtonColor = BasicComponents.datePicker.todayColor;
+//  final Color selectedDayButtonColor = BasicComponents.datePicker.selectedColor;
+//  final Color iconColor = BasicComponents.datePicker.iconColor;
+//  final IconData iconPrevious = BasicComponents.datePicker.iconPrevious;
+//  final IconData iconNext = BasicComponents.datePicker.iconNext;
+//
+////  final Color selectedDayBorderColor = BasicComponents.datePickerSelectedColor;
+//
+//  final List<String> weekDays;
+//  final double viewportFraction;
+//  final Color prevMonthDayBorderColor;
+//  final Color thisMonthDayBorderColor;
+//  final Color nextMonthDayBorderColor;
+//  final double dayPadding;
+//  final Color dayButtonColor;
+//  final bool daysHaveCircularBorder;
+//  final EdgeInsets headerMargin;
+//  final double childAspectRatio;
+//  final EdgeInsets weekDayMargin;
+//
+//  CalendarStyle({
+//    this.weekDays = const ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
+//    this.viewportFraction = 1.0,
+//    this.prevMonthDayBorderColor = Colors.transparent,
+//    this.thisMonthDayBorderColor = Colors.transparent,
+//    this.nextMonthDayBorderColor = Colors.transparent,
+//    this.dayPadding = 2.0,
+//    this.dayButtonColor = Colors.transparent,
+//    this.daysHaveCircularBorder,
+//    this.headerMargin = const EdgeInsets.symmetric(vertical: 16.0),
+//    this.childAspectRatio = 1.0,
+//    this.weekDayMargin = const EdgeInsets.only(bottom: 4.0),
+//  });
+//}
 
 class CalendarCarousel extends StatefulWidget {
   final PickType pickType;
@@ -72,32 +72,32 @@ class CalendarCarousel extends StatefulWidget {
   final Function(List<DateTime>) onDayPressed;
   final List<MarkedDate> markedDates;
   final SelectionType selectionType;
-  final CalendarStyle calendarStyle;
+//  final CalendarStyle calendarStyle;
   final DateTime minDate;
   final DateTime maxDate;
 
   CalendarCarousel({
     PickType pickType,
-    List<String> weekDays = const ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
-    double viewportFraction = 1.0,
-    Color prevMonthDayBorderColor = Colors.transparent,
-    Color thisMonthDayBorderColor = Colors.transparent,
-    Color nextMonthDayBorderColor = Colors.transparent,
-    double dayPadding = 2.0,
-    Color dayButtonColor = Colors.transparent,
+//    List<String> weekDays = const ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
+//    double viewportFraction = 1.0,
+//    Color prevMonthDayBorderColor = Colors.transparent,
+//    Color thisMonthDayBorderColor = Colors.transparent,
+//    Color nextMonthDayBorderColor = Colors.transparent,
+//    double dayPadding = 2.0,
+//    Color dayButtonColor = Colors.transparent,
     this.selectedDateTimes,
-    bool daysHaveCircularBorder,
+//    bool daysHaveCircularBorder,
     this.onDayPressed,
     Color iconColor = Colors.blueAccent,
     List<MarkedDate> markedDates = const [],
     this.selectionType = SelectionType.single,
-    EdgeInsets headerMargin = const EdgeInsets.symmetric(vertical: 16.0),
-    double childAspectRatio = 1.0,
-    EdgeInsets weekDayMargin = const EdgeInsets.only(bottom: 4.0),
+//    EdgeInsets headerMargin = const EdgeInsets.symmetric(vertical: 16.0),
+//    double childAspectRatio = 1.0,
+//    EdgeInsets weekDayMargin = const EdgeInsets.only(bottom: 4.0),
     this.minDate,
     this.maxDate,
   })  : this.pickType = pickType ?? PickType.day,
-        this.markedDates = markedDates ?? const [],
+        this.markedDates = markedDates ?? const []/*,
         this.calendarStyle = CalendarStyle(
           weekDays: weekDays,
           viewportFraction: viewportFraction,
@@ -110,7 +110,7 @@ class CalendarCarousel extends StatefulWidget {
           headerMargin: headerMargin,
           childAspectRatio: childAspectRatio,
           weekDayMargin: weekDayMargin,
-        );
+        )*/;
 
   @override
   _CalendarCarouselState createState() => _CalendarCarouselState();
@@ -146,6 +146,7 @@ class _CalendarCarouselState extends State<CalendarCarousel> with TickerProvider
     List<DateTime> _selectedDateTimes = widget.selectedDateTimes
         .map((DateTime dateTime) => DateTime(dateTime.year, dateTime.month, dateTime.day))
         .toList();
+    ComponentThemeData componentTheme = ComponentTheme.of(context);
     return OrientationBuilder(
       builder: (BuildContext context, Orientation orientation) {
         return Stack(children: [
@@ -159,7 +160,7 @@ class _CalendarCarouselState extends State<CalendarCarousel> with TickerProvider
                     key: _yearKey,
                     pickType: widget.pickType,
                     monthKey: _monthKey,
-                    calendarStyle: widget.calendarStyle,
+                    datePickerTheme: componentTheme.datePicker,
                     monthYearAnim: _monthYearAnim,
                     selectedDateTimes: _selectedDateTimes,
                     onDayPressed: widget.onDayPressed,
@@ -179,7 +180,7 @@ class _CalendarCarouselState extends State<CalendarCarousel> with TickerProvider
                       pickType: widget.pickType,
                       dayKey: _dayKey,
                       yearKey: _yearKey,
-                      calendarStyle: widget.calendarStyle,
+                      datePickerTheme: componentTheme.datePicker,
                       dayMonthAnim: _dayMonthAnim,
                       monthYearAnim: _monthYearAnim,
                       selectedDateTimes: _selectedDateTimes,
@@ -200,7 +201,7 @@ class _CalendarCarouselState extends State<CalendarCarousel> with TickerProvider
                       key: _dayKey,
                       pickType: widget.pickType,
                       monthKey: _monthKey,
-                      calendarStyle: widget.calendarStyle,
+                      datePickerTheme: componentTheme.datePicker,
                       dayMonthAnim: _dayMonthAnim,
                       selectedDateTimes: _selectedDateTimes,
                       onDayPressed: widget.onDayPressed,

@@ -7,6 +7,8 @@ import 'package:basic_components/components/adv_button.dart';
 import 'package:basic_components/components/adv_column.dart';
 import 'package:basic_components/components/adv_row.dart';
 import 'package:basic_components/components/adv_visibility.dart';
+import 'package:basic_components/components/component_theme.dart';
+import 'package:basic_components/components/component_theme_data.dart';
 import 'package:basic_components/helper/string_helper.dart';
 import 'package:basic_components/helper/theme_helper.dart';
 import 'package:flutter/gestures.dart';
@@ -116,7 +118,7 @@ class AdvDatePicker extends StatefulWidget {
                 maxDate != null &&
                 minDate.compareTo(maxDate) <= 0) ||
             !(minDate != null && maxDate != null)),
-        this.dateFormat = dateFormat ?? BasicComponents.datePicker.dateFormat;
+        this.dateFormat = dateFormat;
 
   @override
   _AdvDatePickerState createState() => _AdvDatePickerState();
@@ -200,7 +202,8 @@ class _AdvDatePickerState extends State<AdvDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    DateFormat df = DateFormat(widget.dateFormat);
+    ComponentThemeData componentTheme = ComponentTheme.of(context);
+    DateFormat df = DateFormat(widget.dateFormat ?? componentTheme.datePicker.dateFormat);
     TextEditingController textEditingCtrl = new TextEditingController(
         text: _effectiveController.date == null
             ? ""

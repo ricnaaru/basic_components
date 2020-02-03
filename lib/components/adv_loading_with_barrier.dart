@@ -1,4 +1,5 @@
-import 'package:basic_components/basic_components.dart';
+import 'package:basic_components/components/component_theme.dart';
+import 'package:basic_components/components/component_theme_data.dart';
 import 'package:flutter/material.dart';
 
 class AdvLoadingWithBarrier extends StatelessWidget {
@@ -16,17 +17,22 @@ class AdvLoadingWithBarrier extends StatelessWidget {
       double width,
       double height,
       WidgetBuilder processingContent})
-      : this.barrierColor = barrierColor ?? BasicComponents.loading.barrierColor,
-        this.width = width ?? BasicComponents.loading.width,
-        this.height = height ?? BasicComponents.loading.height,
+      : this.barrierColor = barrierColor,
+        this.width = width,
+        this.height = height,
         this.processingContent = processingContent ?? content;
 
   @override
   Widget build(BuildContext context) {
+    ComponentThemeData componentTheme = ComponentTheme.of(context);
+    Color _barrierColor = barrierColor ?? componentTheme.loading.barrierColor;
+    double _width = width ?? componentTheme.loading.width;
+    double _height = height ?? componentTheme.loading.height;
+
     return Stack(
       children: <Widget>[
         isProcessing ? processingContent(context) : content(context),
-        _AdvLoadingWrapper(isProcessing, barrierColor, width, height)
+        _AdvLoadingWrapper(isProcessing, _barrierColor, _width, _height)
       ],
     );
   }
@@ -44,7 +50,8 @@ class _AdvLoadingWrapper extends StatefulWidget {
   State<StatefulWidget> createState() => _AdvLoadingWrapperState();
 }
 
-class _AdvLoadingWrapperState extends State<_AdvLoadingWrapper> with TickerProviderStateMixin {
+class _AdvLoadingWrapperState extends State<_AdvLoadingWrapper>
+    with TickerProviderStateMixin {
   AnimationController opacityController;
 
   @override
@@ -52,7 +59,8 @@ class _AdvLoadingWrapperState extends State<_AdvLoadingWrapper> with TickerProvi
     super.initState();
     if (!this.mounted) return;
 
-    opacityController = AnimationController(duration: Duration(milliseconds: 200), vsync: this);
+    opacityController =
+        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
 
     opacityController.addListener(() {
       if (this.mounted) setState(() {});
@@ -69,10 +77,14 @@ class _AdvLoadingWrapperState extends State<_AdvLoadingWrapper> with TickerProvi
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!opacityController.isAnimating) {
-        if (widget.visible && opacityController.value == 0.0) opacityController.forward(from: 0.0);
-        if (!widget.visible && opacityController.value == 1.0) opacityController.reverse(from: 1.0);
+        if (widget.visible && opacityController.value == 0.0)
+          opacityController.forward(from: 0.0);
+        if (!widget.visible && opacityController.value == 1.0)
+          opacityController.reverse(from: 1.0);
       }
     });
+    ComponentThemeData componentTheme = ComponentTheme.of(context);
+    String _assetName = componentTheme.loading.assetName;
 
     return Visibility(
       visible: opacityController.value > 0.0,
@@ -82,11 +94,10 @@ class _AdvLoadingWrapperState extends State<_AdvLoadingWrapper> with TickerProvi
           child: Container(
             color: widget.barrierColor,
             child: Center(
-              child: BasicComponents.loading.assetName == null ||
-                      BasicComponents.loading.assetName.isEmpty
+              child: _assetName == null || _assetName.isEmpty
                   ? CircularProgressIndicator()
                   : Image.asset(
-                      BasicComponents.loading.assetName,
+                      _assetName,
                       height: widget.height,
                       width: widget.width,
                     ),

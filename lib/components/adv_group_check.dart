@@ -2,10 +2,11 @@ library group_check;
 
 import 'dart:async';
 
-import 'package:basic_components/basic_components.dart';
 import 'package:basic_components/components/adv_check_box.dart';
 import 'package:basic_components/components/adv_column.dart';
 import 'package:basic_components/components/adv_list_tile.dart';
+import 'package:basic_components/components/component_theme.dart';
+import 'package:basic_components/components/component_theme_data.dart';
 import 'package:flutter/material.dart';
 
 part 'adv_group_check_controller.dart';
@@ -17,9 +18,13 @@ class AdvGroupCheck extends StatefulWidget {
   final GroupCheckCallback callback;
 
   AdvGroupCheck(
-      {String text, Map<String, Widget> items, AdvGroupCheckController controller, this.callback})
+      {String text,
+      Map<String, Widget> items,
+      AdvGroupCheckController controller,
+      this.callback})
       : assert(controller == null || (text == null && items == null)),
-        this.controller = controller ?? new AdvGroupCheckController(items: items ?? []);
+        this.controller =
+            controller ?? new AdvGroupCheckController(items: items ?? []);
 
   @override
   State<StatefulWidget> createState() => _AdvGroupCheckState();
@@ -42,6 +47,7 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
+    ComponentThemeData componentTheme = ComponentTheme.of(context);
 
     for (int i = 0; i < widget.controller.items.length; i++) {
       AdvGroupCheckItem item = widget.controller.items[i];
@@ -79,7 +85,7 @@ class _AdvGroupCheckState extends State<AdvGroupCheck> {
                 value: item.isChecked,
                 radius: Radius.circular(AdvCheckbox.width / 4),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                activeColor: BasicComponents.groupCheck.checkColor,
+                activeColor: componentTheme.groupCheck.checkColor,
               )))));
     }
 

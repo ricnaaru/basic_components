@@ -52,16 +52,13 @@ class _CalendarPageState extends State<CalendarPage>
         margin: EdgeInsets.symmetric(horizontal: 16.0),
         child: CalendarCarousel(
           selectionType: _selectionType,
-          weekDays: BasicComponents.datePicker.weekdaysArray,
           onDayPressed: (List<DateTime> dates) async {
             if (_datePicked) return;
             _datePicked = true;
             this.setState(() => _currentDate = dates);
             Navigator.pop(context, _currentDate);
           },
-          thisMonthDayBorderColor: Colors.grey,
           selectedDateTimes: _currentDate,
-          daysHaveCircularBorder: false,
           markedDates: widget.markedDates,
           minDate: widget.minDate,
           maxDate: widget.maxDate,

@@ -1,3 +1,4 @@
+import 'package:basic_components/basic_components.dart';
 import 'package:basic_components/components/adv_chooser.dart';
 import 'package:basic_components/components/adv_column.dart';
 import 'package:basic_components/components/adv_date_picker.dart';
@@ -6,20 +7,34 @@ import 'package:basic_components/components/adv_group_radio.dart';
 import 'package:basic_components/components/adv_increment.dart';
 import 'package:basic_components/components/adv_row.dart';
 import 'package:basic_components/components/adv_text_field.dart';
+import 'package:basic_components/components/component_theme.dart';
+import 'package:basic_components/components/component_theme_data.dart';
+import 'package:basic_components/components/palette.dart';
+import 'package:basic_components/components/textstyles.dart';
 import 'package:basic_components/utilities/toast.dart';
 import 'package:flutter/material.dart';
+
+class ExtendedPalette extends Palette {
+  @override
+  // TODO: implement accentMaterial
+  MaterialColor get accentMaterial => Colors.green;
+}
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    palette = ExtendedPalette();
+    return ComponentTheme(
+      data: ComponentThemeData(chooser: ChooserTheme(iconColor: Colors.purple)),
+      child: MaterialApp(
       title: 'PIT Components Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'PIT Components Demo Home Page'),
+      ),
     );
   }
 }
@@ -63,6 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Color c = ComponentTheme.of(context).chooser.iconColor;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -91,6 +108,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   isDense: true,
                   helperText: "This is Helper Text",
                 ),
+              ),
+              Text(
+                "Prefix",
+                style: p16.accent.copyWith(color: c),
               ),
               TextField(
                 minLines: 3,

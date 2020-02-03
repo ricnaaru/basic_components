@@ -4,7 +4,7 @@ class DayCalendar extends StatefulWidget {
   final BuildContext mainContext;
   final GlobalKey<MonthCalendarState> monthKey;
   final AnimationController dayMonthAnim;
-  final CalendarStyle calendarStyle;
+  final DatePickerTheme datePickerTheme;
   final PickType pickType;
   final SelectionType selectionType;
   final List<MarkedDate> markedDates;
@@ -21,7 +21,7 @@ class DayCalendar extends StatefulWidget {
     Key key,
     this.monthKey,
     this.dayMonthAnim,
-    this.calendarStyle,
+    this.datePickerTheme,
     this.pickType,
     this.selectionType,
     this.markedDates,
@@ -95,7 +95,7 @@ class DayCalendarState extends State<DayCalendar> {
     _pageCtrl = PageController(
       initialPage: 1,
       keepPage: true,
-      viewportFraction: widget.calendarStyle.viewportFraction,
+      viewportFraction: widget.datePickerTheme.viewportFraction,
     );
 
     /// set _pageDates for the first time
@@ -134,10 +134,10 @@ class DayCalendarState extends State<DayCalendar> {
           final Rect destRect = rectTween.evaluate(widget.dayMonthAnim);
 
           /// minus padding for each horizontal and vertical axis
-          final Size destSize = Size(destRect.size.width - (widget.calendarStyle.dayPadding * 2),
-              destRect.size.height - (widget.calendarStyle.dayPadding * 2));
-          final double top = destRect.top + widget.calendarStyle.dayPadding;
-          final double left = destRect.left + widget.calendarStyle.dayPadding;
+          final Size destSize = Size(destRect.size.width - (widget.datePickerTheme.dayPadding * 2),
+              destRect.size.height - (widget.datePickerTheme.dayPadding * 2));
+          final double top = destRect.top + widget.datePickerTheme.dayPadding;
+          final double left = destRect.left + widget.datePickerTheme.dayPadding;
 
           double xFactor = destSize.width / rectTween.begin.width;
           double yFactor = destSize.height / rectTween.begin.height;
@@ -171,8 +171,8 @@ class DayCalendarState extends State<DayCalendar> {
             IconButton(
               onPressed: () => _setPage(page: 0),
               icon: Icon(
-                widget.calendarStyle.iconPrevious,
-                color: widget.calendarStyle.iconColor,
+                widget.datePickerTheme.iconPrevious,
+                color: widget.datePickerTheme.iconColor,
               ),
             ),
             Builder(builder: (BuildContext childContext) {
@@ -180,11 +180,11 @@ class DayCalendarState extends State<DayCalendar> {
               return Expanded(
                 child: InkWell(
                   child: Container(
-                    padding: widget.calendarStyle.headerMargin,
+                    padding: widget.datePickerTheme.headerMargin,
                     child: Text(
                       '$title',
                       textAlign: TextAlign.center,
-                      style: widget.calendarStyle.defaultHeaderTextStyle,
+                      style: widget.datePickerTheme.headerTextStyle,
                     ),
                   ),
                   onTap: () => _handleDayTitleTapped(context),
@@ -192,11 +192,11 @@ class DayCalendarState extends State<DayCalendar> {
               );
             }),
             IconButton(
-              padding: widget.calendarStyle.headerMargin,
+              padding: widget.datePickerTheme.headerMargin,
               onPressed: () => _setPage(page: 2),
               icon: Icon(
-                widget.calendarStyle.iconNext,
-                color: widget.calendarStyle.iconColor,
+                widget.datePickerTheme.iconNext,
+                color: widget.datePickerTheme.iconColor,
               ),
             ),
           ],
@@ -266,8 +266,8 @@ class DayCalendarState extends State<DayCalendar> {
             IconButton(
               onPressed: () => _setPage(page: 0),
               icon: Icon(
-                widget.calendarStyle.iconPrevious,
-                color: widget.calendarStyle.iconColor,
+                widget.datePickerTheme.iconPrevious,
+                color: widget.datePickerTheme.iconColor,
               ),
             ),
             Builder(builder: (BuildContext childContext) {
@@ -275,11 +275,11 @@ class DayCalendarState extends State<DayCalendar> {
               return Expanded(
                 child: InkWell(
                   child: Container(
-                    padding: widget.calendarStyle.headerMargin,
+                    padding: widget.datePickerTheme.headerMargin,
                     child: Text(
                       '$title',
                       textAlign: TextAlign.center,
-                      style: widget.calendarStyle.defaultHeaderTextStyle,
+                      style: widget.datePickerTheme.headerTextStyle,
                     ),
                   ),
                   onTap: () => _handleDayTitleTapped(context),
@@ -287,11 +287,11 @@ class DayCalendarState extends State<DayCalendar> {
               );
             }),
             IconButton(
-              padding: widget.calendarStyle.headerMargin,
+              padding: widget.datePickerTheme.headerMargin,
               onPressed: () => _setPage(page: 2),
               icon: Icon(
-                widget.calendarStyle.iconNext,
-                color: widget.calendarStyle.iconColor,
+                widget.datePickerTheme.iconNext,
+                color: widget.datePickerTheme.iconColor,
               ),
             ),
           ],
@@ -305,7 +305,7 @@ class DayCalendarState extends State<DayCalendar> {
                 0,
             child: Container(
               child: Text(
-                BasicComponents.datePicker.markedDatesTitle,
+                widget.datePickerTheme.markedDatesTitle,
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w700),
               ),
               width: double.infinity,
@@ -319,7 +319,7 @@ class DayCalendarState extends State<DayCalendar> {
                     .toList()
                     .map((markedDate) {
           var tp = new TextPainter(
-              text: TextSpan(text: "99 Nov", style: widget.calendarStyle.defaultNotesTextStyle),
+              text: TextSpan(text: "99 Nov", style: widget.datePickerTheme.markedDaysTextStyle),
               textDirection: ui.TextDirection.ltr);
 
           tp.layout();
@@ -331,13 +331,13 @@ class DayCalendarState extends State<DayCalendar> {
                     child: Text(
                       "${df.format(markedDate.date)}",
                       textAlign: TextAlign.end,
-                      style: widget.calendarStyle.defaultNotesTextStyle,
+                      style: widget.datePickerTheme.markedDaysTextStyle,
                     ),
                     width: tp.width),
                 Expanded(
                   child: Text(
                     "${markedDate.note}",
-                    style: widget.calendarStyle.defaultNotesTextStyle,
+                    style: widget.datePickerTheme.markedDaysTextStyle,
                   ),
                 )
               ]);
@@ -376,7 +376,7 @@ class DayCalendarState extends State<DayCalendar> {
           child: GridView.count(
             shrinkWrap: true,
             crossAxisCount: 7,
-            childAspectRatio: widget.calendarStyle.childAspectRatio,
+            childAspectRatio: widget.datePickerTheme.childAspectRatio,
             padding: EdgeInsets.zero,
             children: List.generate(totalItemCount, (index) {
               DateTime currentDate = DateTime(year, month, index + 1 - this._startWeekday);
@@ -408,48 +408,48 @@ class DayCalendarState extends State<DayCalendar> {
               Color borderColor;
               if (isPrevMonthDay) {
                 textStyle = isSelectedDay || isStartEndDay
-                    ? widget.calendarStyle.defaultSelectedDayTextStyle
+                    ? widget.datePickerTheme.selectedDayTextStyle
                     : isToday
-                        ? widget.calendarStyle.defaultTodayTextStyle
+                        ? widget.datePickerTheme.todayTextStyle
                         : (index % 7 == 0 || index % 7 == 6)
-                            ? widget.calendarStyle.defaultWeekendTextStyle
-                            : widget.calendarStyle.defaultDaysTextStyle;
+                            ? widget.datePickerTheme.weekendTextStyle
+                            : widget.datePickerTheme.weekdayTextStyle;
                 textStyle =
                     textStyle.copyWith(color: Color.lerp(textStyle.color, Colors.white, 0.7));
-                borderColor = widget.calendarStyle.prevMonthDayBorderColor;
+                borderColor = widget.datePickerTheme.prevMonthDayBorderColor;
               } else if (isThisMonthDay) {
                 textStyle = isSelectedDay || isStartEndDay
-                    ? widget.calendarStyle.defaultSelectedDayTextStyle
+                    ? widget.datePickerTheme.selectedDayTextStyle
                     : isToday
-                        ? widget.calendarStyle.defaultTodayTextStyle
+                        ? widget.datePickerTheme.todayTextStyle
                         : (index % 7 == 0 || index % 7 == 6)
-                            ? widget.calendarStyle.defaultWeekendTextStyle
-                            : widget.calendarStyle.defaultDaysTextStyle;
+                            ? widget.datePickerTheme.weekendTextStyle
+                            : widget.datePickerTheme.weekdayTextStyle;
                 borderColor = isToday
-                    ? widget.calendarStyle.todayBorderColor
-                    : widget.calendarStyle.nextMonthDayBorderColor;
+                    ? widget.datePickerTheme.todayColor
+                    : widget.datePickerTheme.nextMonthDayBorderColor;
               } else if (isNextMonthDay) {
                 textStyle = isSelectedDay || isStartEndDay
-                    ? widget.calendarStyle.defaultSelectedDayTextStyle
+                    ? widget.datePickerTheme.selectedDayTextStyle
                     : isToday
-                        ? widget.calendarStyle.defaultTodayTextStyle
+                        ? widget.datePickerTheme.todayTextStyle
                         : (index % 7 == 0 || index % 7 == 6)
-                            ? widget.calendarStyle.defaultWeekendTextStyle
-                            : widget.calendarStyle.defaultDaysTextStyle;
+                            ? widget.datePickerTheme.weekendTextStyle
+                            : widget.datePickerTheme.weekdayTextStyle;
                 textStyle =
                     textStyle.copyWith(color: Color.lerp(textStyle.color, Colors.white, 0.7));
-                borderColor = widget.calendarStyle.nextMonthDayBorderColor;
+                borderColor = widget.datePickerTheme.nextMonthDayBorderColor;
               }
 
               Color boxColor;
-              if (isStartEndDay && widget.calendarStyle.selectedDayButtonColor != null) {
-                boxColor = widget.calendarStyle.selectedDayButtonColor;
-              } else if (isSelectedDay && widget.calendarStyle.selectedDayButtonColor != null) {
-                boxColor = widget.calendarStyle.selectedDayButtonColor.withAlpha(150);
-              } else if (isToday && widget.calendarStyle.todayBorderColor != null) {
-                boxColor = widget.calendarStyle.todayButtonColor;
+              if (isStartEndDay && widget.datePickerTheme.selectedColor != null) {
+                boxColor = widget.datePickerTheme.selectedColor;
+              } else if (isSelectedDay && widget.datePickerTheme.selectedColor != null) {
+                boxColor = widget.datePickerTheme.selectedColor.withAlpha(150);
+              } else if (isToday && widget.datePickerTheme.todayColor != null) {
+                boxColor = widget.datePickerTheme.todayColor;
               } else {
-                boxColor = widget.calendarStyle.dayButtonColor;
+                boxColor = widget.datePickerTheme.dayButtonColor;
               }
 
               int currentDateLong = currentDate.millisecondsSinceEpoch;
@@ -458,14 +458,14 @@ class DayCalendarState extends State<DayCalendar> {
               bool availableDate = currentDateLong >= minDateLong && currentDateLong <= maxDateLong;
 
               return Container(
-                margin: EdgeInsets.all(widget.calendarStyle.dayPadding),
+                margin: EdgeInsets.all(widget.datePickerTheme.dayPadding),
                 child: IgnorePointer(
                   ignoring: !availableDate,
                   child: FlatButton(
                     color: availableDate ? boxColor : Color.lerp(lerpColor, boxColor, 0.8),
                     onPressed: () => _handleDayBoxTapped(currentDate),
-                    padding: EdgeInsets.all(widget.calendarStyle.dayPadding),
-                    shape: (widget.calendarStyle.daysHaveCircularBorder ?? false)
+                    padding: EdgeInsets.all(widget.datePickerTheme.dayPadding),
+                    shape: (widget.datePickerTheme.daysHaveCircularBorder ?? false)
                         ? CircleBorder(side: BorderSide(color: borderColor))
                         : RoundedRectangleBorder(side: BorderSide(color: borderColor)),
                     child: Stack(children: <Widget>[
@@ -496,7 +496,7 @@ class DayCalendarState extends State<DayCalendar> {
                 0,
             child: Container(
               child: Text(
-                BasicComponents.datePicker.markedDatesTitle,
+                widget.datePickerTheme.markedDatesTitle,
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w700),
               ),
               width: double.infinity,
@@ -511,7 +511,7 @@ class DayCalendarState extends State<DayCalendar> {
                   .toList()
                   .map((markedDate) {
                 var tp = new TextPainter(
-                    text: TextSpan(text: "99 Nov", style: widget.calendarStyle.defaultNotesTextStyle),
+                    text: TextSpan(text: "99 Nov", style: widget.datePickerTheme.markedDaysTextStyle),
                     textDirection: ui.TextDirection.ltr);
 
                 tp.layout();
@@ -523,13 +523,13 @@ class DayCalendarState extends State<DayCalendar> {
                           child: Text(
                             "${df.format(markedDate.date)}",
                             textAlign: TextAlign.end,
-                            style: widget.calendarStyle.defaultNotesTextStyle,
+                            style: widget.datePickerTheme.markedDaysTextStyle,
                           ),
                           width: tp.width),
                       Expanded(
                         child: Text(
                           "${markedDate.note}",
-                          style: widget.calendarStyle.defaultNotesTextStyle,
+                          style: widget.datePickerTheme.markedDaysTextStyle,
                         ),
                       )
                     ]);
@@ -554,7 +554,7 @@ class DayCalendarState extends State<DayCalendar> {
     return GridView.count(
             shrinkWrap: true,
             crossAxisCount: 7,
-            childAspectRatio: widget.calendarStyle.childAspectRatio,
+            childAspectRatio: widget.datePickerTheme.childAspectRatio,
             padding: EdgeInsets.zero,
             children: List.generate(totalItemCount, (index) {
               DateTime currentDate = DateTime(year, month, index + 1 - this._startWeekday);
@@ -586,48 +586,48 @@ class DayCalendarState extends State<DayCalendar> {
               Color borderColor;
               if (isPrevMonthDay) {
                 textStyle = isSelectedDay || isStartEndDay
-                    ? widget.calendarStyle.defaultSelectedDayTextStyle
+                    ? widget.datePickerTheme.selectedDayTextStyle
                     : isToday
-                        ? widget.calendarStyle.defaultTodayTextStyle
+                        ? widget.datePickerTheme.todayTextStyle
                         : (index % 7 == 0 || index % 7 == 6)
-                            ? widget.calendarStyle.defaultWeekendTextStyle
-                            : widget.calendarStyle.defaultDaysTextStyle;
+                            ? widget.datePickerTheme.weekendTextStyle
+                            : widget.datePickerTheme.weekdayTextStyle;
                 textStyle =
                     textStyle.copyWith(color: Color.lerp(textStyle.color, Colors.white, 0.7));
-                borderColor = widget.calendarStyle.prevMonthDayBorderColor;
+                borderColor = widget.datePickerTheme.prevMonthDayBorderColor;
               } else if (isThisMonthDay) {
                 textStyle = isSelectedDay || isStartEndDay
-                    ? widget.calendarStyle.defaultSelectedDayTextStyle
+                    ? widget.datePickerTheme.selectedDayTextStyle
                     : isToday
-                        ? widget.calendarStyle.defaultTodayTextStyle
+                        ? widget.datePickerTheme.todayTextStyle
                         : (index % 7 == 0 || index % 7 == 6)
-                            ? widget.calendarStyle.defaultWeekendTextStyle
-                            : widget.calendarStyle.defaultDaysTextStyle;
+                            ? widget.datePickerTheme.weekendTextStyle
+                            : widget.datePickerTheme.weekdayTextStyle;
                 borderColor = isToday
-                    ? widget.calendarStyle.todayBorderColor
-                    : widget.calendarStyle.nextMonthDayBorderColor;
+                    ? widget.datePickerTheme.todayColor
+                    : widget.datePickerTheme.nextMonthDayBorderColor;
               } else if (isNextMonthDay) {
                 textStyle = isSelectedDay || isStartEndDay
-                    ? widget.calendarStyle.defaultSelectedDayTextStyle
+                    ? widget.datePickerTheme.selectedDayTextStyle
                     : isToday
-                        ? widget.calendarStyle.defaultTodayTextStyle
+                        ? widget.datePickerTheme.todayTextStyle
                         : (index % 7 == 0 || index % 7 == 6)
-                            ? widget.calendarStyle.defaultWeekendTextStyle
-                            : widget.calendarStyle.defaultDaysTextStyle;
+                            ? widget.datePickerTheme.weekendTextStyle
+                            : widget.datePickerTheme.weekdayTextStyle;
                 textStyle =
                     textStyle.copyWith(color: Color.lerp(textStyle.color, Colors.white, 0.7));
-                borderColor = widget.calendarStyle.nextMonthDayBorderColor;
+                borderColor = widget.datePickerTheme.nextMonthDayBorderColor;
               }
 
               Color boxColor;
-              if (isStartEndDay && widget.calendarStyle.selectedDayButtonColor != null) {
-                boxColor = widget.calendarStyle.selectedDayButtonColor;
-              } else if (isSelectedDay && widget.calendarStyle.selectedDayButtonColor != null) {
-                boxColor = widget.calendarStyle.selectedDayButtonColor.withAlpha(150);
-              } else if (isToday && widget.calendarStyle.todayBorderColor != null) {
-                boxColor = widget.calendarStyle.todayButtonColor;
+              if (isStartEndDay && widget.datePickerTheme.selectedColor != null) {
+                boxColor = widget.datePickerTheme.selectedColor;
+              } else if (isSelectedDay && widget.datePickerTheme.selectedColor != null) {
+                boxColor = widget.datePickerTheme.selectedColor.withAlpha(150);
+              } else if (isToday && widget.datePickerTheme.todayColor != null) {
+                boxColor = widget.datePickerTheme.todayColor;
               } else {
-                boxColor = widget.calendarStyle.dayButtonColor;
+                boxColor = widget.datePickerTheme.dayButtonColor;
               }
 
               int currentDateLong = currentDate.millisecondsSinceEpoch;
@@ -636,14 +636,14 @@ class DayCalendarState extends State<DayCalendar> {
               bool availableDate = currentDateLong >= minDateLong && currentDateLong <= maxDateLong;
 
               return Container(
-                margin: EdgeInsets.all(widget.calendarStyle.dayPadding),
+                margin: EdgeInsets.all(widget.datePickerTheme.dayPadding),
                 child: IgnorePointer(
                   ignoring: !availableDate,
                   child: FlatButton(
                     color: availableDate ? boxColor : Color.lerp(lerpColor, boxColor, 0.8),
                     onPressed: () => _handleDayBoxTapped(currentDate),
-                    padding: EdgeInsets.all(widget.calendarStyle.dayPadding),
-                    shape: (widget.calendarStyle.daysHaveCircularBorder ?? false)
+                    padding: EdgeInsets.all(widget.datePickerTheme.dayPadding),
+                    shape: (widget.datePickerTheme.daysHaveCircularBorder ?? false)
                         ? CircleBorder(side: BorderSide(color: borderColor))
                         : RoundedRectangleBorder(side: BorderSide(color: borderColor)),
                     child: Stack(children: <Widget>[
@@ -668,15 +668,15 @@ class DayCalendarState extends State<DayCalendar> {
 
   List<Widget> _renderWeekDays() {
     List<Widget> list = [];
-    for (var weekDay in widget.calendarStyle.weekDays) {
+    for (var weekDay in widget.datePickerTheme.weekdaysArray) {
       list.add(
         Expanded(
             child: Container(
-          margin: widget.calendarStyle.weekDayMargin,
+          margin: widget.datePickerTheme.weekDayMargin,
           child: Center(
             child: Text(
               weekDay,
-              style: widget.calendarStyle.daysLabelTextStyle,
+              style: widget.datePickerTheme.daysLabelTextStyle,
             ),
           ),
         )),
@@ -691,7 +691,7 @@ class DayCalendarState extends State<DayCalendar> {
     if (widget.markedDates != null &&
         widget.markedDates.length > 0 &&
         widget.markedDates.where((markedDate) => markedDate.date == now).toList().length > 0) {
-      return widget.calendarStyle.defaultMarkedDateWidget;
+      return widget.datePickerTheme.markedDateWidget;
     }
 
     return Container();

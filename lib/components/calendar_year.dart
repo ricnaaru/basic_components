@@ -4,7 +4,7 @@ class YearCalendar extends StatefulWidget {
   final BuildContext mainContext;
   final GlobalKey<MonthCalendarState> monthKey;
   final AnimationController monthYearAnim;
-  final CalendarStyle calendarStyle;
+  final DatePickerTheme datePickerTheme;
   final PickType pickType;
   final SelectionType selectionType;
   final List<MarkedDate> markedDates;
@@ -20,7 +20,7 @@ class YearCalendar extends StatefulWidget {
     Key key,
     this.monthKey,
     this.monthYearAnim,
-    this.calendarStyle,
+    this.datePickerTheme,
     this.pickType,
     this.selectionType,
     this.markedDates,
@@ -123,7 +123,7 @@ class YearCalendarState extends State<YearCalendar> with SingleTickerProviderSta
     _pageCtrl = PageController(
       initialPage: 1,
       keepPage: true,
-      viewportFraction: widget.calendarStyle.viewportFraction,
+      viewportFraction: widget.datePickerTheme.viewportFraction,
 
       /// width percentage
     );
@@ -151,17 +151,17 @@ class YearCalendarState extends State<YearCalendar> with SingleTickerProviderSta
             child: Column(
               children: <Widget>[
                 Container(
-                  margin: widget.calendarStyle.headerMargin,
+                  margin: widget.datePickerTheme.headerMargin,
                   child: DefaultTextStyle(
-                    style: widget.calendarStyle.defaultHeaderTextStyle,
+                    style: widget.datePickerTheme.headerTextStyle,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         IconButton(
                           onPressed: () => _setPage(page: 0),
                           icon: Icon(
-                            widget.calendarStyle.iconPrevious,
-                            color: widget.calendarStyle.iconColor,
+                            widget.datePickerTheme.iconPrevious,
+                            color: widget.datePickerTheme.iconColor,
                           ),
                         ),
                         Container(
@@ -172,8 +172,8 @@ class YearCalendarState extends State<YearCalendar> with SingleTickerProviderSta
                         IconButton(
                           onPressed: () => _setPage(page: 2),
                           icon: Icon(
-                            widget.calendarStyle.iconNext,
-                            color: widget.calendarStyle.iconColor,
+                            widget.datePickerTheme.iconNext,
+                            color: widget.datePickerTheme.iconColor,
                           ),
                         ),
                       ],
@@ -204,7 +204,7 @@ class YearCalendarState extends State<YearCalendar> with SingleTickerProviderSta
     return GridView.count(
       shrinkWrap: true,
       crossAxisCount: widget.isLandscape ? 6 : 4,
-      childAspectRatio: widget.calendarStyle.childAspectRatio,
+      childAspectRatio: widget.datePickerTheme.childAspectRatio,
       padding: EdgeInsets.zero,
       children: List.generate(12, (index) {
         bool isToday = DateTime.now().year == year + index + 1;
@@ -231,28 +231,28 @@ class YearCalendarState extends State<YearCalendar> with SingleTickerProviderSta
         TextStyle textStyle;
         Color borderColor;
         Color boxColor;
-        if (isStartEndDay && widget.calendarStyle.selectedDayButtonColor != null) {
-          textStyle = widget.calendarStyle.defaultSelectedDayTextStyle;
-          boxColor = widget.calendarStyle.selectedDayButtonColor;
-          borderColor = widget.calendarStyle.thisMonthDayBorderColor;
+        if (isStartEndDay && widget.datePickerTheme.selectedColor != null) {
+          textStyle = widget.datePickerTheme.selectedDayTextStyle;
+          boxColor = widget.datePickerTheme.selectedColor;
+          borderColor = widget.datePickerTheme.thisMonthDayBorderColor;
         } else if (isSelectedDay) {
-          textStyle = widget.calendarStyle.defaultSelectedDayTextStyle;
-          boxColor = widget.calendarStyle.selectedDayButtonColor.withAlpha(150);
-          borderColor = widget.calendarStyle.thisMonthDayBorderColor;
+          textStyle = widget.datePickerTheme.selectedDayTextStyle;
+          boxColor = widget.datePickerTheme.selectedColor.withAlpha(150);
+          borderColor = widget.datePickerTheme.thisMonthDayBorderColor;
         } else if (isToday) {
-          textStyle = widget.calendarStyle.defaultTodayTextStyle;
-          boxColor = widget.calendarStyle.todayButtonColor;
-          borderColor = widget.calendarStyle.todayBorderColor;
+          textStyle = widget.datePickerTheme.todayTextStyle;
+          boxColor = widget.datePickerTheme.todayColor;
+          borderColor = widget.datePickerTheme.todayColor;
         } else {
-          textStyle = widget.calendarStyle.defaultDaysTextStyle;
-          boxColor = widget.calendarStyle.dayButtonColor;
-          borderColor = widget.calendarStyle.thisMonthDayBorderColor;
+          textStyle = widget.datePickerTheme.weekdayTextStyle;
+          boxColor = widget.datePickerTheme.dayButtonColor;
+          borderColor = widget.datePickerTheme.thisMonthDayBorderColor;
         }
 
         bool availableDate = currentDate.year >= (widget.minDate?.year ?? currentDate.year) &&
             currentDate.year <= (widget.maxDate?.year ?? currentDate.year);
 
-        TextStyle fixedTextStyle = isToday ? widget.calendarStyle.defaultTodayTextStyle : textStyle;
+        TextStyle fixedTextStyle = isToday ? widget.datePickerTheme.todayTextStyle : textStyle;
 
         return Builder(builder: (BuildContext context) {
           /// if [index]' boxRect is still null, set post frame callback to
@@ -269,14 +269,14 @@ class YearCalendarState extends State<YearCalendar> with SingleTickerProviderSta
           }
 
           return Container(
-            margin: EdgeInsets.all(widget.calendarStyle.dayPadding),
+            margin: EdgeInsets.all(widget.datePickerTheme.dayPadding),
             child: IgnorePointer(
               ignoring: !availableDate,
               child: FlatButton(
                 color: availableDate ? boxColor : Color.lerp(lerpColor, boxColor, 0.8),
                 onPressed: () => _handleYearBoxTapped(context, currentDate.year),
-                padding: EdgeInsets.all(widget.calendarStyle.dayPadding),
-                shape: (widget.calendarStyle.daysHaveCircularBorder ?? false)
+                padding: EdgeInsets.all(widget.datePickerTheme.dayPadding),
+                shape: (widget.datePickerTheme.daysHaveCircularBorder ?? false)
                     ? CircleBorder(
                   side: BorderSide(color: borderColor),
                 )

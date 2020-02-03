@@ -1,5 +1,3 @@
-import 'package:basic_components/components/component_theme.dart';
-import 'package:basic_components/components/component_theme_data.dart';
 import 'package:basic_components/helper/theme_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as m;
@@ -168,7 +166,12 @@ class AdvButton extends StatelessWidget {
               highlightColor: Theme.of(context).dividerColor,
               splashColor: Theme.of(context).dividerColor,
               child: this.child,
-              onPressed: enable ? this.onPressed ?? _defaultCallback : null,
+              onPressed: enable
+                  ? () {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      if (this.onPressed != null) this.onPressed();
+                    }
+                  : null,
               shape: border,
             )));
   }

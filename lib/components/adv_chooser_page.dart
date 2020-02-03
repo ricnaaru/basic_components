@@ -18,6 +18,8 @@ class AdvChooserPage extends StatefulWidget {
 }
 
 class _AdvChooserPageState extends State<AdvChooserPage> {
+  Timer _timer;
+
   @override
   Widget build(BuildContext context) {
     Map<String, Widget> groupRadioItems = widget.items.map((key, value) {
@@ -27,16 +29,38 @@ class _AdvChooserPageState extends State<AdvChooserPage> {
     AdvGroupRadioController controller = AdvGroupRadioController(
         text: widget.currentItem, items: groupRadioItems);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: SingleChildScrollView(
-        child: AdvGroupRadio(
-          controller: controller,
-          callback: (itemSelected) async {
-            Navigator.of(context).pop(itemSelected);
-          },
+    return WillPopScope(
+      onWillPop: () async {
+        return _timer == null;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: SingleChildScrollView(
+          child: AdvGroupRadio(
+            controller: controller,
+            callback: (itemSelected) async {
+              Navigator.of(context).push(PageRouteBuilder(
+                  opaque: false,
+                  pageBuilder: (BuildContext context, _, __) {
+                    return WillPopScope(
+                        onWillPop: () async {
+                          return _timer == null;
+                        },
+                        child: Container());
+                  }));
+
+              if (_timer != null) {
+                _timer.cancel();
+              }
+              _timer = Timer(Duration(milliseconds: 300), () {
+                _timer = null;
+                Navigator.of(context).pop();
+                Navigator.of(context).pop(itemSelected);
+              });
+            },
+          ),
         ),
       ),
     );

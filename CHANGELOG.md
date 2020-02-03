@@ -1,3 +1,26 @@
+## [1.0.0+6] - 3 Des 2019.
+
+* Fix groupcheck and groupRadio not calling callback
+
+## [1.0.0+5] - 3 Des 2019.
+
+* Fix groupcheck's items argument from Map<String, Widget> to List<AdvGroupCheckItem>
+* Add prefixCheckbox for both GroupCheck and GroupRadio
+* Takeout GroupRadio's timer after user tapped and move it to pickFromChooser
+
+## [1.0.0+4] - 2 Des 2019.
+
+* Add clear focus when button is pressed
+* Fix Chooser drop icon position when errors
+
+## [1.0.0+3] - 2 Des 2019.
+
+* Fix increment min amount issue
+
+## [1.0.0+2] - 25 Nov 2019.
+
+* Fix chooser padding issues
+
 ## [1.0.0+1] - 23 Nov 2019.
 
 * Fix textfield didupdatewidget

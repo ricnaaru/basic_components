@@ -1,3 +1,10 @@
+## [1.0.1] - 5 Feb 2020.
+
+* Group Check dan Group Radio divider garisnya jgn kasi margin horizontal
+* adv checkbox kasi size param
+* Increment padding dsb masi ngaco dan measuretext
+* Increment kalo uda mentok, disable button
+
 ## [1.0.0+6] - 3 Des 2019.
 
 * Fix groupcheck and groupRadio not calling callback

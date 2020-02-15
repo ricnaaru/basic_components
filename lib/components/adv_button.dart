@@ -18,6 +18,7 @@ class AdvButton extends StatelessWidget {
   final Color accentColor;
   final double width;
   final EdgeInsets padding;
+  final EdgeInsets margin;
 
   AdvButton._(
       {this.child,
@@ -30,7 +31,8 @@ class AdvButton extends StatelessWidget {
       Color primaryColor,
       Color accentColor,
       this.width,
-      EdgeInsets padding})
+        EdgeInsets padding,
+        EdgeInsets margin})
       : this.buttonSize = buttonSize ?? ButtonSize.large,
         this.enable = enable ?? true,
         this.circular = circular ?? 5.0,
@@ -38,7 +40,8 @@ class AdvButton extends StatelessWidget {
         this.reverse = reverse ?? false,
         this.primaryColor = primaryColor,
         this.accentColor = accentColor,
-        this.padding = padding;
+        this.padding = padding,
+        this.margin = margin;
 
   factory AdvButton.text(String text,
       {double circular = 5.0,
@@ -51,7 +54,8 @@ class AdvButton extends StatelessWidget {
       Color backgroundColor,
       Color textColor,
       double width,
-      EdgeInsets padding}) {
+        EdgeInsets padding,
+        EdgeInsets margin}) {
     Color primaryColor = backgroundColor;
     Color accentColor = textColor;
     double fontSize = buttonSize == ButtonSize.large ? 16.0 : 12.0;
@@ -82,6 +86,7 @@ class AdvButton extends StatelessWidget {
       accentColor: accentColor,
       width: width,
       padding: padding,
+      margin: margin,
     );
   }
 
@@ -97,7 +102,8 @@ class AdvButton extends StatelessWidget {
       Color primaryColor,
       Color accentColor,
       double width,
-      EdgeInsets padding}) {
+      EdgeInsets padding,
+        EdgeInsets margin}) {
     return AdvButton._(
       child: child,
       circular: circular,
@@ -110,6 +116,7 @@ class AdvButton extends StatelessWidget {
       accentColor: accentColor,
       width: width,
       padding: padding,
+      margin: margin,
     );
   }
 
@@ -159,6 +166,7 @@ class AdvButton extends StatelessWidget {
         minWidth: 0.0,
         height: 0.0,
         child: Container(
+          margin: margin,
             width: width,
             child: FlatButton(
               padding: finalPadding,

@@ -7,12 +7,14 @@ class ComponentThemeData {
     GroupCheckTheme groupCheck,
     GroupRadioTheme groupRadio,
     DatePickerTheme datePicker,
+    TimePickerTheme timePicker,
     ButtonTheme button,
     LoadingTheme loading,
   })  : this.chooser = chooser ?? const ChooserTheme(),
         this.groupCheck = groupCheck ?? const GroupCheckTheme(),
         this.groupRadio = groupRadio ?? const GroupRadioTheme(),
         this.datePicker = datePicker ?? const DatePickerTheme(),
+        this.timePicker = timePicker ?? const TimePickerTheme(),
         this.button = button ?? const ButtonTheme(),
         this.loading = loading ?? const LoadingTheme();
 
@@ -20,6 +22,7 @@ class ComponentThemeData {
   final GroupCheckTheme groupCheck;
   final GroupRadioTheme groupRadio;
   final DatePickerTheme datePicker;
+  final TimePickerTheme timePicker;
   final ButtonTheme button;
   final LoadingTheme loading;
 
@@ -61,6 +64,15 @@ class ComponentThemeData {
     EdgeInsets datePickerHeaderMargin,
     double datePickerChildAspectRatio,
     EdgeInsets datePickerWeekDayMargin,
+    Color timePickerSelectedColor,
+    Color timePickerNonSelectedColor,
+    double timePickerFontSize,
+    TextStyle timePickerButtonTextStyle,
+    TextStyle timePickerTitleTextStyle,
+    Color timePickerButtonColor,
+    Color timePickerMeridiemButtonColor,
+    TextStyle timePickerMeridiemTextStyle,
+    IconData timePickerIcon,
     Color buttonTextColor,
     Color buttonBackgroundColor,
     String loadingAssetName,
@@ -107,6 +119,17 @@ class ComponentThemeData {
         headerMargin: datePickerHeaderMargin,
         childAspectRatio: datePickerChildAspectRatio,
         weekDayMargin: datePickerWeekDayMargin,
+      ),
+      timePicker: timePicker.copyWith(
+        selectedColor: timePickerSelectedColor,
+        nonSelectedColor: timePickerNonSelectedColor,
+        fontSize: timePickerFontSize,
+        buttonTextStyle: timePickerButtonTextStyle,
+        titleTextStyle: timePickerTitleTextStyle,
+        buttonColor: timePickerButtonColor,
+        meridiemButtonColor: timePickerMeridiemButtonColor,
+        meridiemTextStyle: timePickerMeridiemTextStyle,
+        icon: timePickerIcon,
       ),
       button: button.copyWith(
         textColor: buttonTextColor,
@@ -528,6 +551,97 @@ class DatePickerTheme {
       headerMargin.hashCode,
       childAspectRatio.hashCode,
       weekDayMargin.hashCode,
+    ];
+    return hashList(values);
+  }
+}
+
+class TimePickerTheme {
+  final Color selectedColor;
+  final Color nonSelectedColor;
+  final double fontSize;
+  final TextStyle buttonTextStyle;
+  final TextStyle titleTextStyle;
+  final Color buttonColor;
+  final Color meridiemButtonColor;
+  final TextStyle meridiemTextStyle;
+  final IconData icon;
+
+  const TimePickerTheme({
+    Color selectedColor,
+    Color nonSelectedColor,
+    double fontSize,
+    TextStyle buttonTextStyle,
+    TextStyle titleTextStyle,
+    Color buttonColor,
+    Color meridiemButtonColor,
+    TextStyle meridiemTextStyle,
+    IconData icon,
+  })  : this.selectedColor = selectedColor ?? Colors.black,
+        this.nonSelectedColor = nonSelectedColor ?? const Color(0xFF202020),
+        this.fontSize = fontSize ?? 20.0,
+        this.buttonTextStyle =
+            buttonTextStyle ?? const TextStyle(color: Color(0xff208e5d)),
+        this.titleTextStyle =
+            titleTextStyle ?? const TextStyle(color: Color(0xffffffff)),
+        this.buttonColor = buttonColor ?? const Color(0xffff6378),
+        this.meridiemButtonColor =
+            meridiemButtonColor ?? const Color(0xffff6378),
+        this.meridiemTextStyle =
+            meridiemTextStyle ?? const TextStyle(color: Color(0xffffffff), fontWeight:FontWeight.w500),
+        this.icon = icon ?? Icons.alarm;
+
+  TimePickerTheme copyWith({
+    Color selectedColor,
+    Color nonSelectedColor,
+    double fontSize,
+    TextStyle buttonTextStyle,
+    TextStyle titleTextStyle,
+    Color buttonColor,
+    Color meridiemButtonColor,
+    TextStyle meridiemTextStyle,
+    IconData icon,
+  }) {
+    return TimePickerTheme(
+      selectedColor: selectedColor ?? this.selectedColor,
+      nonSelectedColor: nonSelectedColor ?? this.nonSelectedColor,
+      fontSize: fontSize ?? this.fontSize,
+      buttonTextStyle: buttonTextStyle ?? this.buttonTextStyle,
+      titleTextStyle: titleTextStyle ?? this.titleTextStyle,
+      buttonColor: buttonColor ?? this.buttonColor,
+      meridiemButtonColor: meridiemButtonColor ?? this.meridiemButtonColor,
+      meridiemTextStyle: meridiemTextStyle ?? this.meridiemTextStyle,
+      icon: icon ?? this.icon,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) return false;
+    final TimePickerTheme otherData = other;
+    return (otherData.selectedColor == selectedColor) &&
+        (otherData.nonSelectedColor == nonSelectedColor) &&
+        (otherData.fontSize == fontSize) &&
+        (otherData.buttonTextStyle == buttonTextStyle) &&
+        (otherData.titleTextStyle == titleTextStyle) &&
+        (otherData.buttonColor == buttonColor) &&
+        (otherData.meridiemButtonColor == meridiemButtonColor) &&
+        (otherData.meridiemTextStyle == meridiemTextStyle) &&
+        (otherData.icon == icon);
+  }
+
+  @override
+  int get hashCode {
+    final List<Object> values = <Object>[
+      selectedColor.hashCode,
+      nonSelectedColor.hashCode,
+      fontSize.hashCode,
+      buttonTextStyle.hashCode,
+      titleTextStyle.hashCode,
+      buttonColor.hashCode,
+      meridiemButtonColor.hashCode,
+      meridiemTextStyle.hashCode,
+      icon.hashCode,
     ];
     return hashList(values);
   }

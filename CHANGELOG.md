@@ -1,3 +1,14 @@
+## 15 Feb 2020.
+
+* buat advtimepicker
+* chooser belum ada measuretext
+* increment kalo error aneh jadinya
+* bikin timepicker
+* tambah margin di button
+* gmn kalo attribute textfield itu dimasukkin ke 1 class aja? jadi smua bs dimodify real time
+* cari tau knp chooser pas bottomsheetnya nongol dia gk kecheck
+* fetch data pertama x kyknya dihapusin aja deh
+
 ## [1.0.1] - 5 Feb 2020.
 
 * Group Check dan Group Radio divider garisnya jgn kasi margin horizontal

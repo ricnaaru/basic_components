@@ -296,7 +296,7 @@ class _AdvIncrementState extends State<AdvIncrement> {
           (widget.addIconMargin?.horizontal ?? 0) +
           (widget.subtractIconPadding?.horizontal ?? 0) +
           (widget.addIconPadding?.horizontal ?? 0) +
-          (definedPadding.horizontal ??
+          (definedPadding?.horizontal ??
               0) /*adjustment di fontsize 60, ukuran adjustment 8.0*/;
     }
 
@@ -308,8 +308,8 @@ class _AdvIncrementState extends State<AdvIncrement> {
           textField,
           Positioned(
             left: widget.subtractIconMargin.left,
-            top: widget.subtractIconMargin.top,
-            bottom: widget.subtractIconMargin.bottom,
+            top: widget.subtractIconMargin.top + (fontSize * 0.8),// supaya kalo ada error, iconnya gk ke bawah
+//            bottom: widget.subtractIconMargin.bottom,
             child: IncrementButton(
               controller: _effectiveController,
               color: widget.subtractButtonColor,
@@ -323,8 +323,8 @@ class _AdvIncrementState extends State<AdvIncrement> {
           ),
           Positioned(
             right: widget.addIconMargin.right,
-            top: widget.addIconMargin.top,
-            bottom: widget.addIconMargin.bottom,
+            top: widget.addIconMargin.top + (fontSize * 0.8),// supaya kalo ada error, iconnya gk ke bawah
+//            bottom: widget.addIconMargin.bottom,
             child: IncrementButton(
               controller: _effectiveController,
               color: widget.addButtonColor,

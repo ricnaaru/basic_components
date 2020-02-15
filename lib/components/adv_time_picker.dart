@@ -1,47 +1,22 @@
-library adv_date_picker;
+library adv_time_picker;
 
-import 'dart:ui' as ui;
-
-import 'package:basic_components/basic_components.dart';
-import 'package:basic_components/components/adv_button.dart';
-import 'package:basic_components/components/adv_column.dart';
-import 'package:basic_components/components/adv_row.dart';
-import 'package:basic_components/components/adv_visibility.dart';
-import 'package:basic_components/components/component_theme.dart';
-import 'package:basic_components/components/component_theme_data.dart';
-import 'package:basic_components/helper/string_helper.dart';
-import 'package:basic_components/helper/theme_helper.dart';
+import 'package:basic_components/components/basic/time_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-import 'adv_column.dart';
+part 'adv_time_picker_controller.dart';
 
-part 'adv_date_picker_controller.dart';
+typedef String OnTimePicked(DateTime time);
 
-part "calendar_carousel.dart";
-
-part "calendar_day.dart";
-
-part "calendar_month.dart";
-
-part "calendar_page.dart";
-
-part "calendar_year.dart";
-
-typedef String OnDatePicked(List<DateTime> dates);
-
-class AdvDatePicker extends StatefulWidget {
+class AdvTimePicker extends StatefulWidget {
   final Key key;
-  final OnDatePicked onDatePicked;
-  final DateTime date;
-  final DateTime minDate;
-  final DateTime maxDate;
-  final List<MarkedDate> markedDates;
-  final SelectionType selectionType;
-  final String dateFormat;
-  final List<DateTime> dates;
-  final AdvDatePickerController controller;
+  final OnTimePicked onTimePicked;
+  final DateTime time;
+  final DateTime minTime;
+  final DateTime maxTime;
+  final String timeFormat;
+  final AdvTimePickerController controller;
   final FocusNode focusNode;
   final InputDecoration decoration;
   final EdgeInsets margin;
@@ -59,7 +34,6 @@ class AdvDatePicker extends StatefulWidget {
   final bool expands;
   final int maxLength;
   final bool maxLengthEnforced;
-  final ValueChanged<List<DateTime>> onChanged;
   final bool enabled;
   final double cursorWidth;
   final Radius cursorRadius;
@@ -72,16 +46,13 @@ class AdvDatePicker extends StatefulWidget {
   final ScrollController scrollController;
   final ScrollPhysics scrollPhysics;
 
-  AdvDatePicker({
+  AdvTimePicker({
     this.key,
-    this.onDatePicked,
-    this.date,
-    this.minDate,
-    this.maxDate,
-    this.markedDates,
-    this.selectionType,
-    String dateFormat,
-    this.dates,
+    this.onTimePicked,
+    this.time,
+    this.minTime,
+    this.maxTime,
+    String timeFormat,
     this.controller,
     this.focusNode,
     this.decoration,
@@ -100,7 +71,6 @@ class AdvDatePicker extends StatefulWidget {
     this.expands = false,
     this.maxLength,
     this.maxLengthEnforced = true,
-    this.onChanged,
     this.enabled,
     this.cursorWidth = 2.0,
     this.cursorRadius,
@@ -113,76 +83,55 @@ class AdvDatePicker extends StatefulWidget {
     this.scrollController,
     this.scrollPhysics,
   })  : assert(controller == null ||
-            (date == null &&
-                minDate == null &&
-                maxDate == null &&
-                dates == null &&
+            (time == null &&
+                minTime == null &&
+                maxTime == null &&
                 decoration?.errorText == null &&
                 enabled == null)),
-        assert((minDate != null &&
-                maxDate != null &&
-                minDate.compareTo(maxDate) <= 0) ||
-            !(minDate != null && maxDate != null)),
-        this.dateFormat = dateFormat;
+        assert((minTime != null &&
+                maxTime != null &&
+                minTime.compareTo(maxTime) <= 0) ||
+            !(minTime != null && maxTime != null)),
+        this.timeFormat = timeFormat ?? "hh:mm a";
 
   @override
-  _AdvDatePickerState createState() => _AdvDatePickerState();
+  _AdvTimePickerState createState() => _AdvTimePickerState();
 
-  static Future<List<DateTime>> pickDate(
+  static Future<DateTime> pickTime(
     BuildContext context, {
     String title,
-    List<DateTime> dates,
-    List<MarkedDate> markedDates,
-    SelectionType selectionType,
+    DateTime time,
     DateTime minDate,
     DateTime maxDate,
   }) async {
-    List<DateTime> result = await Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) {
-          return CalendarPage(
-            title: title,
-            currentDate: dates ?? const [],
-            markedDates: markedDates ?? const [],
-            selectionType: selectionType ?? SelectionType.single,
-            minDate: minDate,
-            maxDate: maxDate,
-          );
-        },
-        transitionsBuilder: (context, animation1, animation2, child) {
-          return SlideTransition(
-            position: new Tween<Offset>(
-              begin: const Offset(0.0, 1.0),
-              end: Offset.zero,
-            ).animate(animation1),
-            child: child,
-          );
-        },
-        settings: RouteSettings(name: "ComDatePickerPage"),
-      ),
-    );
+    print("time => $time");
+    DateTime result = await TimePicker.pickTime(context,
+        time: time,
+        displayType: DisplayType.bottomSheet,
+        timePickType: TimePickType.hourMinute,
+        title: title,
+        fontSize: 24.0,
+        isTwelveHourFormat: true);
 
     return result;
   }
 }
 
-class _AdvDatePickerState extends State<AdvDatePicker> {
-  AdvDatePickerController get _effectiveController =>
+class _AdvTimePickerState extends State<AdvTimePicker> {
+  AdvTimePickerController get _effectiveController =>
       widget.controller ?? _ctrl;
 
-  AdvDatePickerController _ctrl;
+  AdvTimePickerController _ctrl;
 
   @override
   void initState() {
     super.initState();
 
     _ctrl = widget.controller == null
-        ? AdvDatePickerController(
-            date: widget.date,
-            minDate: widget.minDate,
-            maxDate: widget.maxDate,
-            dates: widget.dates,
+        ? AdvTimePickerController(
+            time: widget.time,
+            minTime: widget.minTime,
+            maxTime: widget.maxTime,
             error: widget.decoration?.errorText,
             enabled: widget.enabled ?? true,
           )
@@ -196,24 +145,22 @@ class _AdvDatePickerState extends State<AdvDatePicker> {
   }
 
   @override
-  void didUpdateWidget(AdvDatePicker oldWidget) {
+  void didUpdateWidget(AdvTimePicker oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.controller == null && oldWidget.controller != null)
-      _ctrl = AdvDatePickerController.fromValue(oldWidget.controller.value);
+      _ctrl = AdvTimePickerController.fromValue(oldWidget.controller.value);
     else if (widget.controller != null && oldWidget.controller == null)
       _ctrl = null;
   }
 
   @override
   Widget build(BuildContext context) {
-    ComponentThemeData componentTheme = ComponentTheme.of(context);
-    DateFormat df =
-        DateFormat(widget.dateFormat ?? componentTheme.datePicker.dateFormat);
+    DateFormat df = DateFormat(widget.timeFormat);
     TextEditingController textEditingCtrl = new TextEditingController(
-        text: _effectiveController.date == null
+        text: _effectiveController.time == null
             ? ""
-            : df.format(_effectiveController.date));
+            : df.format(_effectiveController.time));
 
     InputDecoration decoration = widget.decoration ?? InputDecoration();
     ThemeData themeData = Theme.of(context);
@@ -304,7 +251,7 @@ class _AdvDatePickerState extends State<AdvDatePicker> {
                   width: fontSize + (paddingSize * 2),
                   height: fontSize + (paddingSize * 2),
                   padding: EdgeInsets.all(paddingSize),
-                  child: Icon(Icons.calendar_today, size: iconSize)),
+                  child: Icon(Icons.alarm, size: iconSize)),
             ),
           ),
         ],
@@ -315,21 +262,20 @@ class _AdvDatePickerState extends State<AdvDatePicker> {
   void _onTap() async {
     if (!_effectiveController.enabled) return;
 
-    List<DateTime> dates = await AdvDatePicker.pickDate(
+    DateTime time = await AdvTimePicker.pickTime(
       context,
+      time: _effectiveController.time,
       title: widget.decoration?.labelText ?? "Pick Date",
-      dates: _effectiveController.dates,
-      selectionType: widget.selectionType,
-      minDate: _effectiveController.minDate,
-      maxDate: _effectiveController.maxDate,
-      markedDates: widget.markedDates,
+      minDate: _effectiveController.minTime,
+      maxDate: _effectiveController.maxTime,
     );
 
-    if (dates == null) return;
+    if (time == null) return;
 
-    _effectiveController.dates = dates;
-    _effectiveController.date = dates.first;
+    _effectiveController.time = time;
 
-    if (widget.onChanged != null) widget.onChanged(dates);
+    _effectiveController.error = null;
+
+    if (widget.onTimePicked != null) widget.onTimePicked(time);
   }
 }

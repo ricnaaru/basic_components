@@ -17,6 +17,7 @@ class AdvButton extends StatelessWidget {
   final Color primaryColor;
   final Color accentColor;
   final double width;
+  final double borderWidth;
   final EdgeInsets padding;
   final EdgeInsets margin;
 
@@ -30,7 +31,8 @@ class AdvButton extends StatelessWidget {
       ButtonSize buttonSize,
       Color primaryColor,
       Color accentColor,
-      this.width,
+        this.width,
+        this.borderWidth,
         EdgeInsets padding,
         EdgeInsets margin})
       : this.buttonSize = buttonSize ?? ButtonSize.large,
@@ -53,7 +55,8 @@ class AdvButton extends StatelessWidget {
       ButtonSize buttonSize,
       Color backgroundColor,
       Color textColor,
-      double width,
+        double width,
+        double borderWidth,
         EdgeInsets padding,
         EdgeInsets margin}) {
     Color primaryColor = backgroundColor;
@@ -85,6 +88,7 @@ class AdvButton extends StatelessWidget {
       primaryColor: primaryColor,
       accentColor: accentColor,
       width: width,
+      borderWidth: borderWidth,
       padding: padding,
       margin: margin,
     );
@@ -102,6 +106,7 @@ class AdvButton extends StatelessWidget {
       Color primaryColor,
       Color accentColor,
       double width,
+        double borderWidth,
       EdgeInsets padding,
         EdgeInsets margin}) {
     return AdvButton._(
@@ -115,6 +120,7 @@ class AdvButton extends StatelessWidget {
       primaryColor: primaryColor,
       accentColor: accentColor,
       width: width,
+      borderWidth: borderWidth,
       padding: padding,
       margin: margin,
     );
@@ -139,7 +145,7 @@ class AdvButton extends StatelessWidget {
         ? accentColor ?? componentTheme.button.textColor
         : primaryColor ?? componentTheme.button.backgroundColor;
 
-    double borderWidth = onlyBorder ? 1.0 : 0.0;
+    double _borderWidth = onlyBorder ? (borderWidth ?? 1.0) : 0.0;
     Color disableBackgroundColor =
         Color.lerp(reverse ? Colors.white : Colors.black54, lerpColor, 0.6);
     Color disableTextColor =
@@ -148,7 +154,7 @@ class AdvButton extends StatelessWidget {
     ShapeBorder border = RoundedRectangleBorder(
         side: BorderSide(
             color: enable ? _primaryColor : disableBackgroundColor,
-            width: borderWidth),
+            width: _borderWidth),
         borderRadius: new BorderRadius.circular(this.circular));
 
     Color _color = onlyBorder ? _accentColor : _primaryColor;

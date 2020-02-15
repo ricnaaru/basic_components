@@ -8,6 +8,7 @@
 * gmn kalo attribute textfield itu dimasukkin ke 1 class aja? jadi smua bs dimodify real time
 * cari tau knp chooser pas bottomsheetnya nongol dia gk kecheck
 * fetch data pertama x kyknya dihapusin aja deh
+* add border width to button
 
 ## [1.0.1] - 5 Feb 2020.
 

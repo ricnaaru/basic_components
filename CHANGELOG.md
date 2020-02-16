@@ -1,4 +1,4 @@
-## 15 Feb 2020.
+## [1.0.2] - 15 Feb 2020.
 
 * buat advtimepicker
 * chooser belum ada measuretext

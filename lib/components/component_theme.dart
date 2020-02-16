@@ -24,7 +24,7 @@ class ComponentTheme extends StatelessWidget {
   static ComponentThemeData of(BuildContext context, { bool shadowThemeOnly = false }) {
     final _InheritedTheme inheritedTheme = context.dependOnInheritedWidgetOfExactType<_InheritedTheme>();
 
-      return inheritedTheme.theme.data;
+      return inheritedTheme?.theme?.data ?? ComponentThemeData();
   }
 
   @override
